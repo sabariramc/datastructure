@@ -1,0 +1,5 @@
+class stack{
+
+ struct node
+
+};
