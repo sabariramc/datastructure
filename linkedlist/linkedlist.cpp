@@ -3,65 +3,108 @@
 #include <iostream>
 using namespace std;
 
-void SinglyLinkedList::initiaze_list(int value)
+void DoublyLinkedList::insert_at_head(int value)
 {
-    Node *node = new Node(value);
-    head = node;
-    tail = node;
+    insert(value, 1);
 }
 
-void SinglyLinkedList::insert_at_head(int value)
+void DoublyLinkedList::insert_at_tail(int value)
 {
-    if (size == 0)
-        return initiaze_list(value);
-    Node *node = new Node(value);
-    node->next = head;
-    head = node;
-    size++;
+    insert(value, -1);
 }
 
-void SinglyLinkedList::insert_at_tail(int value)
-{
-    if (size == 0)
-        return initiaze_list(value);
-    Node *node = new Node(value);
-    tail->next = node;
-    tail = node;
-    size++;
-}
-
-int SinglyLinkedList::peak_head()
+int DoublyLinkedList::peak_head()
 {
     if (size == 0)
         throw ListEmpty();
     return head->value;
 }
 
-int SinglyLinkedList::peak_tail()
+int DoublyLinkedList::peak_tail()
 {
     if (size == 0)
         throw ListEmpty();
     return tail->value;
 }
 
-int SinglyLinkedList::get_head()
+int DoublyLinkedList::get_head()
 {
-    if (size == 1)
-    {
-        return terminate_list();
-    }
-    else if (size == 0)
-    {
-        throw ListEmpty();
-    }
+    return get(1);
 }
 
-int SinglyLinkedList::terminate_list()
+int DoublyLinkedList::get_tail()
+{
+    return get(-1);
+}
+
+int DoublyLinkedList::get_size()
+{
+    return size;
+}
+
+void DoublyLinkedList::initiate_list(int value)
+{
+    Node *node = new Node(value);
+    head = node;
+    tail = node;
+    size = 1;
+}
+
+void DoublyLinkedList::insert(int value, int position)
+{
+    if (size == 0)
+        return initiate_list(value);
+    Node *node = new Node(value);
+    if (position == 1)
+    {
+        node->next = head;
+        head->prev = node;
+        head = node;
+    }
+    else
+    {
+        tail->next = node;
+        node->prev = tail;
+        tail = node;
+    }
+    size++;
+}
+
+int DoublyLinkedList::get(int position)
+{
+    if (size == 0)
+        throw ListEmpty();
+    else if (size == 1)
+    {
+        int value = head->value;
+        terminate_list();
+        return value;
+    }
+    Node *node;
+    if (position == 1)
+    {
+        Node *node = head;
+        head = head->next;
+        head->prev = nullptr;
+    }
+    else
+    {
+        node = tail;
+        tail = node->prev;
+        tail->next = nullptr;
+    }
+    size--;
+    node->next = nullptr;
+    node->prev = nullptr;
+    int value = node->value;
+    delete (node);
+    return value;
+}
+
+void DoublyLinkedList::terminate_list()
 {
     size = 0;
+    delete (head);
     head = nullptr;
-    int value = tail->value;
-    delete (tail);
     tail = nullptr;
-    return value;
 }

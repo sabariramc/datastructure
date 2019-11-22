@@ -1,5 +1,13 @@
-class stack{
+#include "linkedlist/linkedlist.h"
+#include "linkedlist/exception.h"
 
- struct node
+class Stack
+{
+public:
+    void push(int value);
+    int peak();
+    int pop();
 
+private:
+    DoublyLinkedList stack;
 };

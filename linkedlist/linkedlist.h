@@ -1,4 +1,4 @@
-class SinglyLinkedList
+class DoublyLinkedList
 {
 public:
     void insert_at_tail(int value);
@@ -7,22 +7,29 @@ public:
     int get_tail();
     int peak_head();
     int peak_tail();
+    int get_size();
 
 private:
     int size = 0;
-    void initiaze_list(int value);
-    int terminate_list();
+    void initiate_list(int value);
+    void insert(int value, int position);
+    int get(int position);
+    int peak(int position);
+    void terminate_list();
     struct Node
     {
         int value;
         Node *next;
+        Node *prev;
         Node(int value)
         {
             this->value = value;
             this->next = nullptr;
+            this->prev = nullptr;
         }
         ~Node()
         {
+            prev = nullptr;
             if (next != nullptr)
             {
                 delete (next);
