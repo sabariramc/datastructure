@@ -10,6 +10,8 @@ public:
     int get_size();
 
 private:
+    const static int position_head = 1;
+    const static int position_tail = -1;
     int size = 0;
     void initiate_list(int value);
     void insert(int value, int position);

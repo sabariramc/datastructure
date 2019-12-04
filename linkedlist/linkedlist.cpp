@@ -5,12 +5,12 @@ using namespace std;
 
 void DoublyLinkedList::insert_at_head(int value)
 {
-    insert(value, 1);
+    insert(value, position_head);
 }
 
 void DoublyLinkedList::insert_at_tail(int value)
 {
-    insert(value, -1);
+    insert(value, position_tail);
 }
 
 int DoublyLinkedList::peak_head()
@@ -29,12 +29,12 @@ int DoublyLinkedList::peak_tail()
 
 int DoublyLinkedList::get_head()
 {
-    return get(1);
+    return get(position_head);
 }
 
 int DoublyLinkedList::get_tail()
 {
-    return get(-1);
+    return get(position_tail);
 }
 
 int DoublyLinkedList::get_size()
@@ -55,7 +55,7 @@ void DoublyLinkedList::insert(int value, int position)
     if (size == 0)
         return initiate_list(value);
     Node *node = new Node(value);
-    if (position == 1)
+    if (position == position_head)
     {
         node->next = head;
         head->prev = node;
@@ -81,7 +81,7 @@ int DoublyLinkedList::get(int position)
         return value;
     }
     Node *node;
-    if (position == 1)
+    if (position == position_head)
     {
         Node *node = head;
         head = head->next;
