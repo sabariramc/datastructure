@@ -12,3 +12,5 @@ add_dependencies(stack linkedlist)
 
 
 add_executable(Datastructure main.cpp)
+
+target_include_directories(Datastructure PUBLIC ${EXTRA_LIBS})
