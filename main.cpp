@@ -7,6 +7,8 @@ using namespace std;
 
 int main(int argc, const char **argv)
 {
-    cout << "Hello World!";
+    Stack s;
+    s.push(1);
+    cout << s.pop();
     return 0;
 }
