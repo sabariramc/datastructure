@@ -11,6 +11,9 @@ list(APPEND EXTRA_LIBS stack)
 add_subdirectory(queue)
 list(APPEND EXTRA_LIBS queue)
 
+add_subdirectory(binarytree)
+list(APPEND EXTRA_LIBS binarytree)
+
 add_subdirectory(test)
 list(APPEND EXTRA_LIBS test)
 

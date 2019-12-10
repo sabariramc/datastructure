@@ -5,7 +5,7 @@
             "label": "cmake run build",
             "command": "/usr/bin/cmake",
             "args": [
-                ".."
+                "../.."
             ],
             "options": {
                 "cwd": "${workspaceFolder}/bin/build"
@@ -22,7 +22,7 @@
             "command": "/usr/bin/cmake",
             "args": [
                 "-DCMAKE_BUILD_TYPE=Debug",
-                ".."
+                "../.."
             ],
             "options": {
                 "cwd": "${workspaceFolder}/bin/debug"

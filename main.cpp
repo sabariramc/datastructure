@@ -7,5 +7,5 @@ using namespace std;
 
 int main(int argc, const char **argv)
 {
-    test_queue();
+    test_binarytree();
 }
