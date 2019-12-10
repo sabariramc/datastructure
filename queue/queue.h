@@ -1,14 +1,14 @@
 #include "linkedlist.h"
 
-class Stack
+class Queue
 {
 public:
-    void push(int value);
+    void enqueue(int value);
     int peak();
-    int pop();
+    int dequeue();
     int size();
     void print();
 
 private:
-    doublylinkedlist stack;
+    doublylinkedlist queue;
 };

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(Datastructure VERSION 1.0)
+project(datastructures VERSION 1.0)
 
 add_subdirectory(linkedlist)
 list(APPEND EXTRA_LIBS linkedlist)
@@ -8,7 +8,12 @@ list(APPEND EXTRA_LIBS linkedlist)
 add_subdirectory(stack)
 list(APPEND EXTRA_LIBS stack)
 
+add_subdirectory(queue)
+list(APPEND EXTRA_LIBS queue)
 
-add_executable(Datastructure main.cpp)
+add_subdirectory(test)
+list(APPEND EXTRA_LIBS test)
 
-target_link_libraries(Datastructure PUBLIC ${EXTRA_LIBS})
+add_executable(datastructures main.cpp)
+
+target_link_libraries(datastructures PUBLIC ${EXTRA_LIBS})

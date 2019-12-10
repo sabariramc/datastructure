@@ -3,46 +3,46 @@
 #include <iostream>
 using namespace std;
 
-void DoublyLinkedList::insert_at_head(int value)
+void doublylinkedlist::insert_at_head(int value)
 {
     insert(value, position_head);
 }
 
-void DoublyLinkedList::insert_at_tail(int value)
+void doublylinkedlist::insert_at_tail(int value)
 {
     insert(value, position_tail);
 }
 
-int DoublyLinkedList::peak_head()
+int doublylinkedlist::peak_head()
 {
     if (size == 0)
         throw ListEmpty();
     return head->value;
 }
 
-int DoublyLinkedList::peak_tail()
+int doublylinkedlist::peak_tail()
 {
     if (size == 0)
         throw ListEmpty();
     return tail->value;
 }
 
-int DoublyLinkedList::get_head()
+int doublylinkedlist::get_head()
 {
     return get(position_head);
 }
 
-int DoublyLinkedList::get_tail()
+int doublylinkedlist::get_tail()
 {
     return get(position_tail);
 }
 
-int DoublyLinkedList::get_size()
+int doublylinkedlist::get_size()
 {
     return size;
 }
 
-void DoublyLinkedList::initiate_list(int value)
+void doublylinkedlist::initiate_list(int value)
 {
     Node *node = new Node(value);
     head = node;
@@ -50,7 +50,7 @@ void DoublyLinkedList::initiate_list(int value)
     size = 1;
 }
 
-void DoublyLinkedList::insert(int value, int position)
+void doublylinkedlist::insert(int value, int position)
 {
     if (size == 0)
         return initiate_list(value);
@@ -70,7 +70,7 @@ void DoublyLinkedList::insert(int value, int position)
     size++;
 }
 
-int DoublyLinkedList::get(int position)
+int doublylinkedlist::get(int position)
 {
     if (size == 0)
         throw ListEmpty();
@@ -83,7 +83,7 @@ int DoublyLinkedList::get(int position)
     Node *node;
     if (position == position_head)
     {
-        Node *node = head;
+        node = head;
         head = head->next;
         head->prev = nullptr;
     }
@@ -101,10 +101,21 @@ int DoublyLinkedList::get(int position)
     return value;
 }
 
-void DoublyLinkedList::terminate_list()
+void doublylinkedlist::terminate_list()
 {
     size = 0;
     delete (head);
     head = nullptr;
     tail = nullptr;
+}
+
+void doublylinkedlist::print()
+{
+    Node *temp = head;
+    while (temp != nullptr)
+    {
+        cout << temp->value << " ";
+        temp = temp->next;
+    }
+    cout << endl;
 }

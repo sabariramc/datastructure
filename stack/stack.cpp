@@ -1,4 +1,6 @@
 #include "stack.h"
+#include <iostream>
+using namespace std;
 
 void Stack::push(int value)
 {
@@ -13,4 +15,22 @@ int Stack::pop()
 int Stack::size()
 {
     return stack.get_size();
+}
+
+int Stack::peak()
+{
+    return stack.peak_head();
+}
+
+void Stack::print()
+{
+    if (stack.get_size() <= 0)
+    {
+        cout << "Stack Empty";
+    }
+    else
+    {
+        cout << "From Top Down:\n";
+        stack.print();
+    }
 }

@@ -3,12 +3,9 @@
 
 using namespace std;
 
-#include "stack.h"
+#include "test.h"
 
 int main(int argc, const char **argv)
 {
-    Stack s;
-    s.push(1);
-    cout << s.pop();
-    return 0;
+    test_queue();
 }

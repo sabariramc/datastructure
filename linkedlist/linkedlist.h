@@ -1,4 +1,4 @@
-class DoublyLinkedList
+class doublylinkedlist
 {
 public:
     void insert_at_tail(int value);
@@ -8,6 +8,16 @@ public:
     int peak_head();
     int peak_tail();
     int get_size();
+    void print();
+    doublylinkedlist()
+    {
+    }
+    ~doublylinkedlist()
+    {
+        delete (head);
+        head = nullptr;
+        tail = nullptr;
+    }
 
 private:
     const static int position_head = 1;
