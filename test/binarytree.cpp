@@ -19,6 +19,10 @@ void test_binarytree()
         case 2:
             s.print();
             break;
+        case 3:
+            cin >> value;
+            s.delete_node(value);
+            break;
         case 4:
             return;
         default:

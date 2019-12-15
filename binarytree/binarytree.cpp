@@ -16,8 +16,8 @@ BinaryTree::~BinaryTree()
 
 void BinaryTree::insert_node(int value)
 {
-    node *temp = new node(value);
-    node **nav = &root;
+    Node *temp = new Node(value);
+    Node **nav = &root;
     int curr_size = size + 1, next_bit;
     Stack s;
     while (curr_size)
@@ -42,7 +42,56 @@ void BinaryTree::insert_node(int value)
     size++;
 }
 
-void BinaryTree::print_inorder(node *temp)
+void BinaryTree::delete_node(int value)
+{
+    Node **nav = &root;
+    bool found = delete_node(nav, value);
+    if (found)
+    {
+        cout << "Value deleted from the tree\n";
+    }
+    else
+    {
+        cout << "Value not found in the tree\n";
+    }
+}
+
+bool BinaryTree::delete_node(Node **nav, int value)
+{
+    if (*nav == nullptr)
+    {
+        return false;
+    }
+    Node *temp = *nav;
+    if (temp->value == value)
+    {
+        if (temp->left != nullptr)
+        {
+            *nav = temp->left;
+            while (*nav != nullptr)
+            {
+                nav = &((*nav)->right);
+            }
+            *nav = temp->right;
+        }
+        else
+        {
+            *nav = temp->right;
+        }
+        temp->left = nullptr;
+        temp->right = nullptr;
+        delete (temp);
+        size--;
+        return true;
+    }
+    bool found = delete_node(&(temp->left), value);
+    if (found)
+        return found;
+    found = delete_node(&(temp->right), value);
+    return found;
+}
+
+void BinaryTree::print_inorder(Node *temp)
 {
     if (temp == nullptr)
     {
@@ -53,7 +102,7 @@ void BinaryTree::print_inorder(node *temp)
     print_inorder(temp->right);
 }
 
-void BinaryTree::print_preorder(node *temp)
+void BinaryTree::print_preorder(Node *temp)
 {
     if (temp == nullptr)
     {
@@ -64,7 +113,7 @@ void BinaryTree::print_preorder(node *temp)
     print_preorder(temp->right);
 }
 
-void BinaryTree::print_postorder(node *temp)
+void BinaryTree::print_postorder(Node *temp)
 {
     if (temp == nullptr)
     {

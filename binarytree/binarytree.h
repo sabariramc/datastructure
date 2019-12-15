@@ -1,18 +1,18 @@
 class BinaryTree
 {
 private:
-    struct node
+    struct Node
     {
         int value;
-        node *left;
-        node *right;
-        node(int value)
+        Node *left;
+        Node *right;
+        Node(int value)
         {
             this->value = value;
             left = nullptr;
             right = nullptr;
         }
-        ~node()
+        ~Node()
         {
             if (left != nullptr)
             {
@@ -26,15 +26,17 @@ private:
             }
         }
     };
-    node *root;
+    Node *root;
     int size = 0;
+    bool delete_node(Node **temp, int value);
 
 public:
     BinaryTree();
     ~BinaryTree();
     void insert_node(int value);
+    void delete_node(int value);
     void print();
-    void print_inorder(node *temp);
-    void print_preorder(node *temp);
-    void print_postorder(node *temp);
+    void print_inorder(Node *temp);
+    void print_preorder(Node *temp);
+    void print_postorder(Node *temp);
 };
