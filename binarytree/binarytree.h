@@ -1,6 +1,6 @@
 class BinaryTree
 {
-private:
+protected:
     struct Node
     {
         int value;

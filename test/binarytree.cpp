@@ -1,10 +1,10 @@
-#include "binarytree.h"
+#include "bst.h"
 #include <iostream>
 using namespace std;
 
 void test_binarytree()
 {
-    BinaryTree s;
+    BST s;
     int instruction;
     int value;
     while (true)
