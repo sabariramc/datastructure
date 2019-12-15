@@ -4,7 +4,7 @@ using namespace std;
 
 void test_binarytree()
 {
-    binarytree s;
+    BinaryTree s;
     int instruction;
     int value;
     while (true)

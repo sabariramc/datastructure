@@ -1,27 +1,35 @@
 #include "binarytree.h"
-
+#include "stack.h"
 #include <iostream>
 using namespace std;
 
-binarytree::binarytree()
+BinaryTree::BinaryTree()
 {
     root = nullptr;
 }
 
-binarytree::~binarytree()
+BinaryTree::~BinaryTree()
 {
     delete (root);
     root = nullptr;
 }
 
-void binarytree::insert_node(int value)
+void BinaryTree::insert_node(int value)
 {
     node *temp = new node(value);
     node **nav = &root;
-    int curr_size = size;
+    int curr_size = size + 1, next_bit;
+    Stack s;
+    while (curr_size)
+    {
+        s.push(curr_size % 2);
+        curr_size >>= 1;
+    }
+    s.pop();
     while (*nav != nullptr)
     {
-        if (curr_size % 2)
+        next_bit = s.pop();
+        if (next_bit)
         {
             nav = &((*nav)->right);
         }
@@ -29,13 +37,12 @@ void binarytree::insert_node(int value)
         {
             nav = &((*nav)->left);
         }
-        curr_size >>= 1;
     }
     *nav = temp;
     size++;
 }
 
-void binarytree::print_inorder(node *temp)
+void BinaryTree::print_inorder(node *temp)
 {
     if (temp == nullptr)
     {
@@ -46,7 +53,7 @@ void binarytree::print_inorder(node *temp)
     print_inorder(temp->right);
 }
 
-void binarytree::print_preorder(node *temp)
+void BinaryTree::print_preorder(node *temp)
 {
     if (temp == nullptr)
     {
@@ -57,7 +64,7 @@ void binarytree::print_preorder(node *temp)
     print_preorder(temp->right);
 }
 
-void binarytree::print_postorder(node *temp)
+void BinaryTree::print_postorder(node *temp)
 {
     if (temp == nullptr)
     {
@@ -68,7 +75,7 @@ void binarytree::print_postorder(node *temp)
     cout << temp->value << " ";
 }
 
-void binarytree::print()
+void BinaryTree::print()
 {
     if (size == 0)
     {

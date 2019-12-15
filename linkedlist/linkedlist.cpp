@@ -3,46 +3,46 @@
 #include <iostream>
 using namespace std;
 
-void doublylinkedlist::insert_at_head(int value)
+void DoublyLinkedList::insert_at_head(int value)
 {
     insert(value, position_head);
 }
 
-void doublylinkedlist::insert_at_tail(int value)
+void DoublyLinkedList::insert_at_tail(int value)
 {
     insert(value, position_tail);
 }
 
-int doublylinkedlist::peak_head()
+int DoublyLinkedList::peak_head()
 {
     if (size == 0)
         throw ListEmpty();
     return head->value;
 }
 
-int doublylinkedlist::peak_tail()
+int DoublyLinkedList::peak_tail()
 {
     if (size == 0)
         throw ListEmpty();
     return tail->value;
 }
 
-int doublylinkedlist::get_head()
+int DoublyLinkedList::get_head()
 {
     return get(position_head);
 }
 
-int doublylinkedlist::get_tail()
+int DoublyLinkedList::get_tail()
 {
     return get(position_tail);
 }
 
-int doublylinkedlist::get_size()
+int DoublyLinkedList::get_size()
 {
     return size;
 }
 
-void doublylinkedlist::initiate_list(int value)
+void DoublyLinkedList::initiate_list(int value)
 {
     Node *node = new Node(value);
     head = node;
@@ -50,7 +50,7 @@ void doublylinkedlist::initiate_list(int value)
     size = 1;
 }
 
-void doublylinkedlist::insert(int value, int position)
+void DoublyLinkedList::insert(int value, int position)
 {
     if (size == 0)
         return initiate_list(value);
@@ -70,7 +70,7 @@ void doublylinkedlist::insert(int value, int position)
     size++;
 }
 
-int doublylinkedlist::get(int position)
+int DoublyLinkedList::get(int position)
 {
     if (size == 0)
         throw ListEmpty();
@@ -101,7 +101,7 @@ int doublylinkedlist::get(int position)
     return value;
 }
 
-void doublylinkedlist::terminate_list()
+void DoublyLinkedList::terminate_list()
 {
     size = 0;
     delete (head);
@@ -109,7 +109,7 @@ void doublylinkedlist::terminate_list()
     tail = nullptr;
 }
 
-void doublylinkedlist::print()
+void DoublyLinkedList::print()
 {
     Node *temp = head;
     while (temp != nullptr)

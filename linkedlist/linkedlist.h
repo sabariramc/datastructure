@@ -1,4 +1,4 @@
-class doublylinkedlist
+class DoublyLinkedList
 {
 public:
     void insert_at_tail(int value);
@@ -9,10 +9,10 @@ public:
     int peak_tail();
     int get_size();
     void print();
-    doublylinkedlist()
+    DoublyLinkedList()
     {
     }
-    ~doublylinkedlist()
+    ~DoublyLinkedList()
     {
         delete (head);
         head = nullptr;

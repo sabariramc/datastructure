@@ -10,5 +10,5 @@ public:
     void print();
 
 private:
-    doublylinkedlist stack;
+    DoublyLinkedList stack;
 };

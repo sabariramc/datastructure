@@ -1,4 +1,4 @@
-class binarytree
+class BinaryTree
 {
 private:
     struct node
@@ -30,8 +30,8 @@ private:
     int size = 0;
 
 public:
-    binarytree();
-    ~binarytree();
+    BinaryTree();
+    ~BinaryTree();
     void insert_node(int value);
     void print();
     void print_inorder(node *temp);
