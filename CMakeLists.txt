@@ -13,12 +13,8 @@ list(APPEND EXTRA_LIBS queue)
 
 add_subdirectory(binarytree)
 list(APPEND EXTRA_LIBS binarytree)
-
-add_subdirectory(binarytree/bst)
 list(APPEND EXTRA_LIBS bst)
-
-add_subdirectory(binarytree/bst/readblacktree)
-list(APPEND EXTRA_LIBS readblacktree)
+list(APPEND EXTRA_LIBS avl)
 
 add_subdirectory(test)
 list(APPEND EXTRA_LIBS test)

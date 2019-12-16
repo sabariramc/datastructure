@@ -1,10 +1,10 @@
-#include "bst.h"
+#include "avl.h"
 #include <iostream>
 using namespace std;
 
 void test_binarytree()
 {
-    BST s;
+    AVL s;
     int instruction;
     int value;
     while (true)
