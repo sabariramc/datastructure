@@ -14,7 +14,6 @@ int AVL::insert_node(AVLNode **nav, int value)
     {
         AVLNode *temp = new AVLNode(value);
         *nav = temp;
-        size++;
         return 1;
     }
     AVLNode *temp = *nav;
@@ -32,17 +31,17 @@ int AVL::insert_node(AVLNode **nav, int value)
     temp = *nav;
     int lh = temp->left_height;
     int rh = temp->right_height;
-    return lh > rh ? lh : rh;
+    return lh > rh ? lh + 1 : rh + 1;
 }
 
 void AVL::check_tree_balance(AVLNode **nav)
 {
     AVLNode *temp = *nav;
-    temp->balance_factor = temp->right_height - temp->left_height;
-    if (temp->balance_factor < -1)
+    int balance_factor = temp->right_height - temp->left_height;
+    if (balance_factor < -1)
     {
         temp = (AVLNode *)temp->left;
-        if (temp->balance_factor < 0)
+        if (balance_factor < 0)
         {
             rotation_left_left(nav);
         }
@@ -51,10 +50,10 @@ void AVL::check_tree_balance(AVLNode **nav)
             rotation_left_right(nav);
         }
     }
-    else if (temp->balance_factor > 1)
+    else if (balance_factor > 1)
     {
         temp = (AVLNode *)temp->right;
-        if (temp->balance_factor < 0)
+        if (balance_factor < 0)
         {
             rotation_right_left(nav);
         }
@@ -67,20 +66,72 @@ void AVL::check_tree_balance(AVLNode **nav)
 
 void AVL::rotation_left_left(AVLNode **nav)
 {
-    AVLNode *temp = *nav;
+    AVLNode *node = *nav;
+    AVLNode *left = (AVLNode *)node->left;
+    AVLNode *left_right = (AVLNode *)left->right;
+    *nav = left;
+    left->right = node;
+    node->left = left_right;
+    node->left_height = left->right_height;
+    int lh = node->left_height;
+    int rh = node->right_height;
+    left->right_height = lh > rh ? lh + 1 : rh + 1;
 }
 
 void AVL::rotation_left_right(AVLNode **nav)
 {
-    AVLNode *temp = *nav;
-}
-
-void AVL::rotation_right_left(AVLNode **nav)
-{
-    AVLNode *temp = *nav;
+    AVLNode *node = *nav;
+    AVLNode *left = (AVLNode *)node->left;
+    AVLNode *left_right = (AVLNode *)left->right;
+    AVLNode *left_right_left = (AVLNode *)left_right->left;
+    AVLNode *left_right_right = (AVLNode *)left_right->right;
+    *nav = left_right;
+    left_right->right = node;
+    left_right->left = left;
+    left->right = left_right_left;
+    node->left = left_right_right;
+    left->right_height = left_right->left_height;
+    node->left_height = left_right->right_height;
+    int lh = left->left_height;
+    int rh = left->right_height;
+    left_right->left_height = lh > rh ? lh + 1 : rh + 1;
+    lh = node->left_height;
+    rh = node->right_height;
+    left_right->right_height = lh > rh ? lh + 1 : rh + 1;
 }
 
 void AVL::rotation_right_right(AVLNode **nav)
 {
-    AVLNode *temp = *nav;
+    AVLNode *node = *nav;
+    AVLNode *right = (AVLNode *)node->right;
+    AVLNode *right_left = (AVLNode *)right->left;
+    *nav = right;
+    right->left = node;
+    node->right = right_left;
+    node->right_height = right->left_height;
+    int lh = node->left_height;
+    int rh = node->right_height;
+    right->left_height = lh > rh ? lh + 1 : rh + 1;
+}
+
+void AVL::rotation_right_left(AVLNode **nav)
+{
+    AVLNode *node = *nav;
+    AVLNode *right = (AVLNode *)node->right;
+    AVLNode *right_left = (AVLNode *)right->left;
+    AVLNode *right_left_left = (AVLNode *)right_left->left;
+    AVLNode *right_left_right = (AVLNode *)right_left->right;
+    *nav = right_left;
+    right_left->right = right;
+    right_left->left = node;
+    right->left = right_left_right;
+    node->right = right_left_left;
+    right->left_height = right_left->right_height;
+    node->right_height = right_left->left_height;
+    int lh = right->left_height;
+    int rh = right->right_height;
+    right_left->right_height = lh > rh ? lh + 1 : rh + 1;
+    lh = node->left_height;
+    rh = node->right_height;
+    right_left->left_height = lh > rh ? lh + 1 : rh + 1;
 }

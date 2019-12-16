@@ -15,6 +15,7 @@ void test_binarytree()
         case 1:
             cin >> value;
             s.insert_node(value);
+            s.print();
             break;
         case 2:
             s.print();
