@@ -15,15 +15,13 @@ protected:
             right_height = 0;
         }
     };
-    bool delete_node(Node **temp, int value);
     void insert_node(AVLNode **nav, int value);
     void check_tree_balance(AVLNode **nav);
     void rotation_left_left(AVLNode **nav);
     void rotation_left_right(AVLNode **nav);
     void rotation_right_left(AVLNode **nav);
     void rotation_right_right(AVLNode **nav);
-
+    
 public:
-    using BST::delete_node;
     void insert_node(int value);
 };

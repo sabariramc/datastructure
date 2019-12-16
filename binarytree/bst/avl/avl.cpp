@@ -70,37 +70,17 @@ void AVL::rotation_left_left(AVLNode **nav)
     AVLNode *temp = *nav;
 }
 
-bool AVL::delete_node(Node **nav, int value)
+void AVL::rotation_left_right(AVLNode **nav)
 {
-    if (*nav == nullptr)
-    {
-        return false;
-    }
-    Node *temp = *nav;
-    if (temp->value == value)
-    {
-        if (temp->left != nullptr)
-        {
-            *nav = temp->left;
-            while (*nav != nullptr)
-            {
-                nav = &((*nav)->right);
-            }
-            *nav = temp->right;
-        }
-        else
-        {
-            *nav = temp->right;
-        }
-        temp->left = nullptr;
-        temp->right = nullptr;
-        delete (temp);
-        size--;
-        return true;
-    }
-    bool found = delete_node(&(temp->left), value);
-    if (found)
-        return found;
-    found = delete_node(&(temp->right), value);
-    return found;
+    AVLNode *temp = *nav;
+}
+
+void AVL::rotation_right_left(AVLNode **nav)
+{
+    AVLNode *temp = *nav;
+}
+
+void AVL::rotation_right_right(AVLNode **nav)
+{
+    AVLNode *temp = *nav;
 }
