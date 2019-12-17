@@ -42,18 +42,20 @@ void BinaryTree::insert_node(int value)
     size++;
 }
 
-void BinaryTree::delete_node(int value)
+bool BinaryTree::delete_node(int value)
 {
     Node **nav = &root;
     bool found = delete_node(nav, value);
     if (found)
     {
         cout << "Value deleted from the tree\n";
+        size--;
     }
     else
     {
         cout << "Value not found in the tree\n";
     }
+    return found;
 }
 
 bool BinaryTree::delete_node(Node **nav, int value)
@@ -78,10 +80,8 @@ bool BinaryTree::delete_node(Node **nav, int value)
         {
             *nav = temp->right;
         }
-        temp->left = nullptr;
-        temp->right = nullptr;
-        delete (temp);
-        size--;
+        delete_node(temp);
+
         return true;
     }
     bool found = delete_node(&(temp->left), value);
@@ -89,6 +89,13 @@ bool BinaryTree::delete_node(Node **nav, int value)
         return found;
     found = delete_node(&(temp->right), value);
     return found;
+}
+
+void BinaryTree::delete_node(Node *node)
+{
+    node->left = nullptr;
+    node->right = nullptr;
+    delete (node);
 }
 
 void BinaryTree::print_inorder(Node *temp)

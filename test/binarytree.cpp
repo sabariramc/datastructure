@@ -23,6 +23,7 @@ void test_binarytree()
         case 3:
             cin >> value;
             s.delete_node(value);
+            s.print();
             break;
         case 4:
             return;

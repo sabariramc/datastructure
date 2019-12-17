@@ -14,7 +14,10 @@ protected:
             right_height = 0;
         }
     };
+    using BinaryTree::delete_node;
     int insert_node(AVLNode **nav, int value);
+    int delete_node(AVLNode **nav, int value);
+    int delete_node_by_copying(AVLNode **target, AVLNode **nav);
     void check_tree_balance(AVLNode **nav);
     void rotation_left_left(AVLNode **nav);
     void rotation_left_right(AVLNode **nav);
@@ -22,5 +25,6 @@ protected:
     void rotation_right_right(AVLNode **nav);
 
 public:
-    void insert_node(int value);
+    bool insert_node(int value);
+    bool delete_node(int value);
 };
