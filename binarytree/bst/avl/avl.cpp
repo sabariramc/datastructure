@@ -29,7 +29,7 @@ int AVL::insert_node(AVLNode **nav, int value)
         AVLNode **right = (AVLNode **)&((*nav)->right);
         temp->right_height = insert_node(right, value);
     }
-    check_tree_balance(nav);
+    check_height_balance(nav);
     temp = *nav;
     int lh = temp->left_height;
     int rh = temp->right_height;
@@ -97,7 +97,7 @@ int AVL::delete_node(AVLNode **nav, int value)
     }
     if (new_height > -1)
     {
-        check_tree_balance(nav);
+        check_height_balance(nav);
         temp = *nav;
         int lh = temp->left_height;
         int rh = temp->right_height;
@@ -126,14 +126,14 @@ int AVL::delete_node_by_copying(AVLNode **target, AVLNode **nav)
     {
         int rh = delete_node_by_copying(target, (AVLNode **)&temp->right);
         temp->right_height = rh;
-        check_tree_balance(nav);
+        check_height_balance(nav);
         temp = *nav;
         int lh = temp->left_height;
         return lh > rh ? lh + 1 : rh + 1;
     }
 }
 
-void AVL::check_tree_balance(AVLNode **nav)
+void AVL::check_height_balance(AVLNode **nav)
 {
     AVLNode *temp = *nav;
     int balance_factor = temp->right_height - temp->left_height;
@@ -233,4 +233,12 @@ void AVL::rotation_right_left(AVLNode **nav)
     lh = node->left_height;
     rh = node->right_height;
     right_left->left_height = lh > rh ? lh + 1 : rh + 1;
+}
+
+void AVL::print_node(Node *node)
+{
+    AVLNode *temp = (AVLNode *)node;
+    int lh = temp->left_height;
+    int rh = temp->right_height;
+    cout << temp->value << "(" << lh << "," << rh << "," << rh - lh << ")";
 }

@@ -105,7 +105,7 @@ void BinaryTree::print_inorder(Node *temp)
         return;
     }
     print_inorder(temp->left);
-    cout << temp->value << " ";
+    print_node(temp);
     print_inorder(temp->right);
 }
 
@@ -145,4 +145,9 @@ void BinaryTree::print()
     cout << "\nPostorder Traversal:";
     print_postorder(root);
     cout << endl;
+}
+
+void BinaryTree::print_node(Node *node)
+{
+    cout << node->value << " ";
 }

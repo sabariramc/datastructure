@@ -18,11 +18,12 @@ protected:
     int insert_node(AVLNode **nav, int value);
     int delete_node(AVLNode **nav, int value);
     int delete_node_by_copying(AVLNode **target, AVLNode **nav);
-    void check_tree_balance(AVLNode **nav);
+    void check_height_balance(AVLNode **nav);
     void rotation_left_left(AVLNode **nav);
     void rotation_left_right(AVLNode **nav);
     void rotation_right_left(AVLNode **nav);
     void rotation_right_right(AVLNode **nav);
+    void print_node(Node *node);
 
 public:
     bool insert_node(int value);

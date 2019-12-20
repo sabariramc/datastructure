@@ -30,6 +30,7 @@ protected:
     int size = 0;
     bool delete_node(Node **temp, int value);
     void delete_node(Node *node);
+    virtual void print_node(Node *node);
 
 public:
     BinaryTree();

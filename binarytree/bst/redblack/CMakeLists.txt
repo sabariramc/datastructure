@@ -1,4 +1,4 @@
-add_library(redblack redblacktree.cpp)
+add_library(redblack redblack.cpp)
 
 target_include_directories(redblack INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
