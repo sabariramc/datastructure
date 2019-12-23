@@ -8,14 +8,15 @@ enum COLOUR
 
 class RedBlack : public BST
 {
+
 protected:
     struct RBNode : Node
     {
-        enum COLOUR node_color;
+        enum COLOUR color;
         RBNode *parent;
         RBNode(int value) : Node(value)
         {
-            node_color = RED;
+            color = RED;
             parent = nullptr;
         }
         ~RBNode()
@@ -31,6 +32,9 @@ protected:
     void rotation_left(RBNode **nav);
     void rotation_right(RBNode **nav);
     void print_node(Node *node);
+
+private:
+    RBNode **get_node_reference(RBNode **nav);
 
 public:
     bool insert_node(int value);

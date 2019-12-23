@@ -44,10 +44,60 @@ int RedBlack::delete_node_by_copying(RBNode **target, RBNode **nav)
 
 void RedBlack::check_rule_violation(RBNode **nav)
 {
+    RBNode *node = *nav;
+    while (node->parent != nullptr && node->parent->color == RED)
+    {
+        if (node->parent == node->parent->parent->left)
+        {
+            RBNode *uncle = (RBNode *)node->parent->parent->right;
+            if (uncle != nullptr && uncle->color == RED)
+            {
+                node->parent->color = BLACK;
+                uncle->color = BLACK;
+                node->parent->parent->color = RED;
+                node = node->parent->parent;
+            }
+            else
+            {
+                if (node == node->parent->right)
+                {
+                    node = node->parent;
+                    rotation_left(&(node->parent));
+                }
+                node->parent->color = BLACK;
+                node->parent->parent->color = RED;
+                rotation_right(&(node->parent->parent));
+            }
+        }
+        else
+        {
+            RBNode *uncle = (RBNode *)node->parent->parent->left;
+            if (uncle != nullptr && uncle->color == RED)
+            {
+                node->parent->color = BLACK;
+                uncle->color = BLACK;
+                node->parent->parent->color = RED;
+                node = node->parent->parent;
+            }
+            else
+            {
+                if (node == node->parent->left)
+                {
+                    node = node->parent;
+                    rotation_right(&(node->parent));
+                }
+                node->parent->color = BLACK;
+                node->parent->parent->color = RED;
+                rotation_left(&(node->parent->parent));
+            }
+        }
+    }
+    node = (RBNode *)root;
+    node->color = BLACK;
 }
-
 void RedBlack::rotation_left(RBNode **nav)
 {
+    nav = get_node_reference(nav);
     RBNode *node = *nav;
     RBNode *right = (RBNode *)node->right;
     RBNode *right_left = (RBNode *)right->left;
@@ -64,6 +114,7 @@ void RedBlack::rotation_left(RBNode **nav)
 
 void RedBlack::rotation_right(RBNode **nav)
 {
+    nav = get_node_reference(nav);
     RBNode *node = *nav;
     RBNode *left = (RBNode *)node->left;
     RBNode *left_right = (RBNode *)left->right;
@@ -78,8 +129,26 @@ void RedBlack::rotation_right(RBNode **nav)
     }
 }
 
+RedBlack::RBNode **RedBlack::get_node_reference(RBNode **nav)
+{
+    RBNode *node = *nav;
+    if (node == root)
+    {
+        nav = (RBNode **)&root;
+    }
+    else if (node->parent->right == node)
+    {
+        nav = (RBNode **)&(node->parent->right);
+    }
+    else
+    {
+        nav = (RBNode **)&(node->parent->left);
+    }
+    return nav;
+}
+
 void RedBlack::print_node(Node *node)
 {
     RBNode *temp = (RBNode *)node;
-    cout << temp->value << "(" << temp->node_color << ")";
+    cout << temp->value << "(" << temp->color << ")";
 }
