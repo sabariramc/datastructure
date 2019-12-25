@@ -12,6 +12,19 @@ bool RedBlack::insert_node(int value)
 
 bool RedBlack::delete_node(int value)
 {
+    RBNode **nav = (RBNode **)&root;
+    int result = delete_node(nav, value);
+    if (result > -1)
+    {
+        size--;
+        cout << "Value deleted from tree\n";
+        return true;
+    }
+    else
+    {
+        cout << "Value not found in the tree\n";
+        return false;
+    }
 }
 
 void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
@@ -36,10 +49,70 @@ void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
 
 int RedBlack::delete_node(RBNode **nav, int value)
 {
+    if (*nav == nullptr)
+    {
+        return -1;
+    }
+    RBNode *temp = *nav;
+    RBNode *fix_up_node = nullptr;
+    if (temp->value == value)
+    {
+        enum COLOUR original_color = temp->color;
+        if (temp->left == nullptr)
+        {
+            *nav = (RBNode *)temp->right;
+            (*nav)->parent = temp->parent;
+            fix_up_node = (RBNode *)temp->right;
+        }
+        else if (temp->right == nullptr)
+        {
+            *nav = (RBNode *)temp->left;
+            (*nav)->parent = temp->parent;
+            fix_up_node = (RBNode *)temp->left;
+        }
+        else
+        {
+            fix_up_node = delete_node_by_copying(nav, (RBNode **)&temp->right);
+            original_color = (*nav)->color;
+            (*nav)->color = temp->color;
+            if (fix_up_node != nullptr && fix_up_node->parent == temp)
+            {
+                fix_up_node->parent = *nav;
+            }
+        }
+        delete_node((Node *)temp);
+        if (original_color == BLACK)
+        {
+        }
+    }
+    else if (temp->value > value)
+    {
+        delete_node((RBNode **)&(temp->left), value);
+    }
+    else
+    {
+        delete_node((RBNode **)&(temp->right), value);
+    }
+    return 1;
 }
 
-int RedBlack::delete_node_by_copying(RBNode **target, RBNode **nav)
+RedBlack::RBNode *RedBlack::delete_node_by_copying(RBNode **target, RBNode **nav)
 {
+    RBNode *temp = *nav;
+    if (temp->left == nullptr)
+    {
+        RBNode *temp_right = (RBNode *)temp->right;
+        *nav = temp_right;
+        if (temp->right != nullptr)
+        {
+            ((RBNode *)temp->right)->parent = *nav;
+        }
+        temp->right = (*target)->right;
+        temp->left = (*target)->left;
+        *target = temp;
+        return temp_right;
+    }
+    return delete_node_by_copying(target, (RBNode **)&temp->left);
 }
 
 void RedBlack::check_rule_violation(RBNode **nav)

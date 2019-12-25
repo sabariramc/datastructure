@@ -27,7 +27,7 @@ protected:
     using BinaryTree::delete_node;
     void insert_node(RBNode **nav, RBNode *p, int &value);
     int delete_node(RBNode **nav, int value);
-    int delete_node_by_copying(RBNode **target, RBNode **nav);
+    RBNode *delete_node_by_copying(RBNode **target, RBNode **nav);
     void check_rule_violation(RBNode **nav);
     void rotation_left(RBNode **nav);
     void rotation_right(RBNode **nav);
