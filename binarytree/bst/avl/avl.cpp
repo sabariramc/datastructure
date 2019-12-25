@@ -107,24 +107,25 @@ int AVL::delete_node(AVLNode **nav, int value)
         return -1;
 }
 
-int AVL::delete_node_by_copying(AVLNode **target, AVLNode **nav)
+int AVL::delete_node_by_copying(AVLNode **copy_to_node, AVLNode **nav)
 {
     AVLNode *temp = *nav;
     if (temp->right == nullptr)
     {
-
         AVLNode *temp_left = (AVLNode *)temp->left;
-        temp->right_height = (*target)->right_height;
-        *nav = (AVLNode *)temp->left;
+        temp->right_height = (*copy_to_node)->right_height;
         int lh = temp->left_height;
-        temp->right = (*target)->right;
-        temp->left = (*target)->left;
-        *target = temp;
+        temp->right = (*copy_to_node)->right;
+        if ((*copy_to_node)->left != temp)
+        {
+            temp->left = (*copy_to_node)->left;
+        }
+        *copy_to_node = temp;
         return lh;
     }
     else
     {
-        int rh = delete_node_by_copying(target, (AVLNode **)&temp->right);
+        int rh = delete_node_by_copying(copy_to_node, (AVLNode **)&temp->right);
         temp->right_height = rh;
         check_height_balance(nav);
         temp = *nav;
