@@ -14,7 +14,7 @@ BinaryTree::~BinaryTree()
     root = nullptr;
 }
 
-void BinaryTree::insert_node(int value)
+bool BinaryTree::insert_node(int value)
 {
     Node *temp = new Node(value);
     Node **nav = &root;
@@ -40,6 +40,7 @@ void BinaryTree::insert_node(int value)
     }
     *nav = temp;
     size++;
+    return true;
 }
 
 bool BinaryTree::delete_node(int value)

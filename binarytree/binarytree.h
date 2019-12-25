@@ -29,16 +29,16 @@ protected:
     Node *root;
     int size = 0;
     bool delete_node(Node **temp, int value);
-    void delete_node(Node *node);
+    virtual void delete_node(Node *node);
     virtual void print_node(Node *node);
 
 public:
     BinaryTree();
     ~BinaryTree();
-    void insert_node(int value);
-    bool delete_node(int value);
-    void print();
-    void print_inorder(Node *temp);
-    void print_preorder(Node *temp);
-    void print_postorder(Node *temp);
+    virtual bool insert_node(int value);
+    virtual bool delete_node(int value);
+    virtual void print() final;
+    virtual void print_inorder(Node *temp);
+    virtual void print_preorder(Node *temp);
+    virtual void print_postorder(Node *temp);
 };

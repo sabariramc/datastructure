@@ -3,5 +3,5 @@
 class BST : public BinaryTree
 {
 public:
-    void insert_node(int value);
+    bool insert_node(int value);
 };

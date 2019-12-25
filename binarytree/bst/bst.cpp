@@ -1,6 +1,6 @@
 #include "bst.h"
 
-void BST::insert_node(int value)
+bool BST::insert_node(int value)
 {
     Node *temp = new Node(value);
     Node **nav = &root;
@@ -17,4 +17,5 @@ void BST::insert_node(int value)
     }
     *nav = temp;
     size++;
+    return true;
 }
