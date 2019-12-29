@@ -22,8 +22,8 @@ void test_binarytree()
             break;
         case 3:
             cin >> value;
-            s->delete_node(value);
-            s->print();
+            if (s->delete_node(value))
+                s->print();
             break;
         case 4:
             return;

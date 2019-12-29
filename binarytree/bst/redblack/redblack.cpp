@@ -33,7 +33,7 @@ void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
     {
         *nav = new RBNode(value);
         (*nav)->parent = p;
-        check_rule_violation(nav);
+        insert_fix_up(nav);
         return;
     }
     RBNode *node = *nav;
@@ -54,35 +54,42 @@ int RedBlack::delete_node(RBNode **nav, int value)
         return -1;
     }
     RBNode *temp = *nav;
-    RBNode *fix_up_node = nullptr;
+    RBNode *temp_parent;
     if (temp->value == value)
     {
         enum COLOUR original_color = temp->color;
-        if (temp->left == nullptr)
+        if (temp->right != nullptr && temp->left != nullptr)
         {
-            *nav = (RBNode *)temp->right;
-            (*nav)->parent = temp->parent;
-            fix_up_node = (RBNode *)temp->right;
-        }
-        else if (temp->right == nullptr)
-        {
-            *nav = (RBNode *)temp->left;
-            (*nav)->parent = temp->parent;
-            fix_up_node = (RBNode *)temp->left;
+            temp = (RBNode *)temp->right;
+            while (temp->left != nullptr)
+            {
+                temp = (RBNode *)temp->left;
+            }
+            temp_parent = temp->parent;
+            original_color = temp->color;
         }
         else
         {
-            fix_up_node = delete_node_by_copying(nav, (RBNode **)&temp->right);
-            original_color = (*nav)->color;
-            (*nav)->color = temp->color;
-            if (fix_up_node != nullptr && fix_up_node->parent == temp)
+            if (temp->left == nullptr)
             {
-                fix_up_node->parent = *nav;
+                temp_parent = temp->parent;
+                temp = (RBNode *)temp->left;
+            }
+            else if (temp->right == nullptr)
+            {
+                temp_parent = temp->parent;
+                temp = (RBNode *)temp->right;
+            }
+            else
+            {
+                temp_parent = temp->parent;
+                temp = nullptr;
             }
         }
         delete_node((Node *)temp);
         if (original_color == BLACK)
         {
+            delete_fix_up()
         }
     }
     else if (temp->value > value)
@@ -96,26 +103,7 @@ int RedBlack::delete_node(RBNode **nav, int value)
     return 1;
 }
 
-RedBlack::RBNode *RedBlack::delete_node_by_copying(RBNode **target, RBNode **nav)
-{
-    RBNode *temp = *nav;
-    if (temp->left == nullptr)
-    {
-        RBNode *temp_right = (RBNode *)temp->right;
-        *nav = temp_right;
-        if (temp->right != nullptr)
-        {
-            ((RBNode *)temp->right)->parent = *nav;
-        }
-        temp->right = (*target)->right;
-        temp->left = (*target)->left;
-        *target = temp;
-        return temp_right;
-    }
-    return delete_node_by_copying(target, (RBNode **)&temp->left);
-}
-
-void RedBlack::check_rule_violation(RBNode **nav)
+void RedBlack::insert_fix_up(RBNode **nav)
 {
     RBNode *node = *nav;
     while (node->parent != nullptr && node->parent->color == RED)
@@ -168,6 +156,11 @@ void RedBlack::check_rule_violation(RBNode **nav)
     node = (RBNode *)root;
     node->color = BLACK;
 }
+
+void RedBlack::delete_fix_up(RBNode **nav)
+{
+}
+
 void RedBlack::rotation_left(RBNode **nav)
 {
     nav = get_node_reference(nav);
