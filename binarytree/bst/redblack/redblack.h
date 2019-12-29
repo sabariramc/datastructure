@@ -28,7 +28,7 @@ protected:
     void insert_node(RBNode **nav, RBNode *p, int &value);
     int delete_node(RBNode **nav, int value);
     void insert_fix_up(RBNode **nav);
-    void delete_fix_up(RBNode **nav);
+    void delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent);
     void rotation_left(RBNode **nav);
     void rotation_right(RBNode **nav);
     void print_node(Node *node);
