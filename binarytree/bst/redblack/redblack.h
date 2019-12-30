@@ -35,6 +35,8 @@ protected:
 
 private:
     RBNode **get_node_reference(RBNode **nav);
+    void rotation_left_on_parent(RBNode *nav);
+    void rotation_right_on_parent(RBNode *nav);
 
 public:
     bool insert_node(int value);

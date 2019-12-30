@@ -7,5 +7,7 @@ using namespace std;
 
 int main(int argc, const char **argv)
 {
+    fclose(stdin);
+    freopen("input.txt", "r", stdin);
     test_binarytree();
 }

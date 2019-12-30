@@ -4,6 +4,7 @@ using namespace std;
 
 bool RedBlack::insert_node(int value)
 {
+    cout << "Insert: " << value << endl;
     RBNode **nav = (RBNode **)&root;
     insert_node(nav, nullptr, value);
     size++;
@@ -12,6 +13,7 @@ bool RedBlack::insert_node(int value)
 
 bool RedBlack::delete_node(int value)
 {
+    cout << "Delete: " << value << " : ";
     RBNode **nav = (RBNode **)&root;
     int result = delete_node(nav, value);
     if (result > -1)
@@ -83,6 +85,7 @@ int RedBlack::delete_node(RBNode **nav, int value)
                 successor->right = temp->right;
                 ((RBNode *)temp->right)->parent = successor;
             }
+            *nav = successor;
         }
         else
         {
@@ -112,16 +115,16 @@ int RedBlack::delete_node(RBNode **nav, int value)
         {
             delete_fix_up(fix_up_node, fix_up_node_parent);
         }
+        return 1;
     }
     else if (temp->value > value)
     {
-        delete_node((RBNode **)&(temp->left), value);
+        return delete_node((RBNode **)&(temp->left), value);
     }
     else
     {
-        delete_node((RBNode **)&(temp->right), value);
+        return delete_node((RBNode **)&(temp->right), value);
     }
-    return 1;
 }
 
 void RedBlack::insert_fix_up(RBNode **nav)
@@ -174,12 +177,128 @@ void RedBlack::insert_fix_up(RBNode **nav)
             }
         }
     }
-    node = (RBNode *)root;
-    node->color = BLACK;
+    ((RBNode *)root)->color = BLACK;
 }
 
 void RedBlack::delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent)
 {
+    while (fix_node != root && (fix_node == nullptr || fix_node->color == BLACK))
+    {
+        if (fix_node_parent->left == fix_node)
+        {
+            RBNode *sibiling = (RBNode *)fix_node_parent->right;
+            if (sibiling->color == RED)
+            {
+                sibiling->color = BLACK;
+                fix_node_parent->color = RED;
+                rotation_left_on_parent(fix_node_parent);
+                fix_node_parent = fix_node->parent;
+                sibiling = (RBNode *)fix_node_parent->right;
+            }
+            RBNode *sibiling_left = (RBNode *)sibiling->left;
+            RBNode *sibiling_right = (RBNode *)sibiling->right;
+            if ((sibiling_left == nullptr || sibiling_left->color == BLACK) && (sibiling_right == nullptr || sibiling_right->color == BLACK))
+            {
+                sibiling->color = RED;
+                fix_node = fix_node_parent;
+                fix_node_parent = fix_node_parent->parent;
+            }
+            else
+            {
+                if (sibiling_right == nullptr || sibiling_right->color == BLACK)
+                {
+                    sibiling_left->color = BLACK;
+                    sibiling->color = RED;
+                    rotation_right((RBNode **)&(fix_node_parent->right));
+                    fix_node_parent = fix_node->parent;
+                    sibiling = (RBNode *)fix_node_parent->right;
+                }
+                sibiling->color = fix_node_parent->color;
+                fix_node_parent->color = BLACK;
+                ((RBNode *)sibiling->right)->color = BLACK;
+                rotation_left_on_parent(fix_node_parent);
+                fix_node = (RBNode *)root;
+            }
+        }
+        else
+        {
+            RBNode *sibiling = (RBNode *)fix_node_parent->left;
+            if (sibiling->color == RED)
+            {
+                sibiling->color = BLACK;
+                fix_node_parent->color = RED;
+                rotation_right_on_parent(fix_node_parent);
+                fix_node_parent = fix_node->parent;
+                sibiling = (RBNode *)fix_node_parent->left;
+            }
+            RBNode *sibiling_left = (RBNode *)sibiling->left;
+            RBNode *sibiling_right = (RBNode *)sibiling->right;
+            if ((sibiling_left == nullptr || sibiling_left->color == BLACK) && (sibiling_right == nullptr || sibiling_right->color == BLACK))
+            {
+                sibiling->color = RED;
+                fix_node = fix_node_parent;
+                fix_node_parent = fix_node_parent->parent;
+            }
+            else
+            {
+                if (sibiling_left == nullptr || sibiling_left->color == BLACK)
+                {
+                    sibiling_right->color = BLACK;
+                    sibiling->color = RED;
+                    rotation_left((RBNode **)&(fix_node_parent->left));
+                    fix_node_parent = fix_node->parent;
+                    sibiling = (RBNode *)fix_node_parent->left;
+                }
+                sibiling->color = fix_node_parent->color;
+                fix_node_parent->color = BLACK;
+                ((RBNode *)sibiling->left)->color = BLACK;
+                rotation_right_on_parent(fix_node_parent);
+                fix_node = (RBNode *)root;
+            }
+        }
+    }
+    if (fix_node != nullptr)
+        fix_node->color = BLACK;
+}
+
+void RedBlack::rotation_left_on_parent(RBNode *fix_node_parent)
+{
+    if (fix_node_parent == root)
+    {
+        rotation_left((RBNode **)&root);
+    }
+    else
+    {
+        RBNode *temp = fix_node_parent->parent;
+        if (temp->left == fix_node_parent)
+        {
+            rotation_left((RBNode **)&temp->left);
+        }
+        else
+        {
+            rotation_left((RBNode **)&temp->right);
+        }
+    }
+}
+
+void RedBlack::rotation_right_on_parent(RBNode *fix_node_parent)
+{
+    if (fix_node_parent == root)
+    {
+        rotation_right((RBNode **)&root);
+    }
+    else
+    {
+        RBNode *temp = fix_node_parent->parent;
+        if (temp->left == fix_node_parent)
+        {
+            rotation_right((RBNode **)&temp->left);
+        }
+        else
+        {
+            rotation_right((RBNode **)&temp->right);
+        }
+    }
 }
 
 void RedBlack::rotation_left(RBNode **nav)
