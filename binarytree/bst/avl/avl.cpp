@@ -4,6 +4,7 @@ using namespace std;
 
 bool AVL::insert_node(int value)
 {
+    cout << "Insert: " << value << endl;
     AVLNode **nav = (AVLNode **)&root;
     insert_node(nav, value);
     size++;
@@ -38,6 +39,7 @@ int AVL::insert_node(AVLNode **nav, int value)
 
 bool AVL::delete_node(int value)
 {
+    cout << "Delete: " << value << " : ";
     AVLNode **nav = (AVLNode **)&root;
     int result = delete_node(nav, value);
     if (result > -1)
@@ -67,6 +69,11 @@ int AVL::delete_node(AVLNode **nav, int value)
         {
             *nav = (AVLNode *)temp->right;
             new_height = temp->right_height;
+        }
+        else if (temp->right == nullptr)
+        {
+            *nav = (AVLNode *)temp->left;
+            new_height = temp->left_height;
         }
         else
         {

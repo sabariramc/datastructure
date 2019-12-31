@@ -8,6 +8,6 @@ using namespace std;
 int main(int argc, const char **argv)
 {
     fclose(stdin);
-    freopen("input.txt", "r", stdin);
+    freopen(argv[1], "r", stdin);
     test_binarytree();
 }

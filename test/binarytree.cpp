@@ -1,10 +1,10 @@
-#include "redblack.h"
+#include "avl.h"
 #include <iostream>
 using namespace std;
 
 void test_binarytree()
 {
-    RedBlack *s = new RedBlack();
+    AVL *s = new AVL();
     int instruction;
     int value;
     while (true)
@@ -26,6 +26,11 @@ void test_binarytree()
                 s->print();
             break;
         case 4:
+            if (!(s->test_tree_integraty()))
+            {
+                s->print();
+            }
+        case 5:
             return;
         default:
             break;
