@@ -26,10 +26,7 @@ void test_binarytree()
                 s->print();
             break;
         case 4:
-            if (!(s->test_tree_integraty()))
-            {
-                s->print();
-            }
+            s->test_tree_integraty();
             break;
         case 5:
             return;

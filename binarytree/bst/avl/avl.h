@@ -24,8 +24,10 @@ protected:
     void rotation_right_left(AVLNode **nav);
     void rotation_right_right(AVLNode **nav);
     void print_node(Node *node);
+    int test_node_height(AVLNode *nav);
 
 public:
     bool insert_node(int value);
+    bool test_tree_integraty();
     bool delete_node(int value);
 };

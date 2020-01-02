@@ -11,7 +11,20 @@ int main(int argc, const char **argv)
     for (int i = 1; i < argc; i++)
     {
         cout << argv[i] << endl;
-        freopen(argv[i], "r", stdin);
-        test_binarytree();
+        FILE *x = freopen(argv[i], "r", stdin);
+        cout << x << endl;
+        if (x)
+        {
+            fflush(stdin);
+            test_binarytree();
+        }
+        else
+        {
+            perror("File Error");
+        }
+        for (int i = 0; i < 1000; i++)
+        {
+            cout << "";
+        }
     }
 }

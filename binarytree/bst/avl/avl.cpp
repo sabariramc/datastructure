@@ -258,3 +258,29 @@ void AVL::print_node(Node *node)
     int rh = temp->right_height;
     cout << temp->value << "(" << lh << "," << rh << "," << rh - lh << ")";
 }
+
+bool AVL::test_tree_integraty()
+{
+    test_node_value(root);
+    test_node_height((AVLNode *)root);
+}
+
+int AVL::test_node_height(AVLNode *nav)
+{
+    if (nav == nullptr)
+    {
+        return 0;
+    }
+    int left_height = test_node_height((AVLNode *)nav->left);
+    int right_height = test_node_height((AVLNode *)nav->right);
+    int balance_factor = right_height - left_height;
+    if ((nav->left_height != left_height) || (nav->right_height != right_height))
+    {
+        cout << "Height integrity lost at node " << nav->value << endl;
+    }
+    if (balance_factor < -1 || balance_factor > 1)
+    {
+        cout << "Balance factor integrity lost at node " << nav->value << endl;
+    }
+    return left_height > right_height ? left_height + 1 : right_height + 1;
+}

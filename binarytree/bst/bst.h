@@ -3,7 +3,7 @@
 class BST : public BinaryTree
 {
 protected:
-    virtual int test_node(Node *nav);
+    virtual int test_node_value(Node *nav);
 
 public:
     bool insert_node(int value);

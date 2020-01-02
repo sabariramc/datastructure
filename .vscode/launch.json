@@ -12,7 +12,8 @@
             "args": [
                 "${workspaceFolder}/testcases/input_1.txt",
                 "${workspaceFolder}/testcases/input_2.txt",
-                "${workspaceFolder}/testcases/input_3.txt"
+                "${workspaceFolder}/testcases/input_3.txt",
+                "${workspaceFolder}/testcases/input_4.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
