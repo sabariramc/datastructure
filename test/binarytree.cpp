@@ -30,10 +30,12 @@ void test_binarytree()
             {
                 s->print();
             }
+            break;
         case 5:
             return;
         default:
-            break;
+            cout << "Invalid Instruction : " << instruction << endl;
+            return;
         }
     }
 }

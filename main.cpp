@@ -7,7 +7,11 @@ using namespace std;
 
 int main(int argc, const char **argv)
 {
-    fclose(stdin);
-    freopen(argv[1], "r", stdin);
-    test_binarytree();
+    freopen("output.txt", "w", stdout);
+    for (int i = 1; i < argc; i++)
+    {
+        cout << argv[i] << endl;
+        freopen(argv[i], "r", stdin);
+        test_binarytree();
+    }
 }

@@ -123,11 +123,17 @@ int AVL::delete_node_by_copying(AVLNode **copy_to_node, AVLNode **nav)
         temp->right_height = (*copy_to_node)->right_height;
         int lh = temp->left_height;
         temp->right = (*copy_to_node)->right;
+        *nav = (AVLNode *)temp->left;
         if ((*copy_to_node)->left != temp)
         {
             temp->left = (*copy_to_node)->left;
         }
+        else
+        {
+            temp->left = nullptr;
+        }
         *copy_to_node = temp;
+
         return lh;
     }
     else
@@ -148,7 +154,8 @@ void AVL::check_height_balance(AVLNode **nav)
     if (balance_factor < -1)
     {
         temp = (AVLNode *)temp->left;
-        if (balance_factor <= 0)
+        balance_factor = temp->right_height - temp->left_height;
+        if (balance_factor < 0)
         {
             rotation_left_left(nav);
         }
@@ -160,6 +167,7 @@ void AVL::check_height_balance(AVLNode **nav)
     else if (balance_factor > 1)
     {
         temp = (AVLNode *)temp->right;
+        balance_factor = temp->right_height - temp->left_height;
         if (balance_factor < 0)
         {
             rotation_right_left(nav);
