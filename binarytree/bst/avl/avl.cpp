@@ -273,10 +273,11 @@ int AVL::test_node_height(AVLNode *nav)
     }
     int left_height = test_node_height((AVLNode *)nav->left);
     int right_height = test_node_height((AVLNode *)nav->right);
-    int balance_factor = right_height - left_height;
+    int balance_factor = nav->right_height - nav->left_height;
     if ((nav->left_height != left_height) || (nav->right_height != right_height))
     {
         cout << "Height integrity lost at node " << nav->value << endl;
+        cout << "Expected Height lh:" << left_height << " rh:" << right_height << endl;
     }
     if (balance_factor < -1 || balance_factor > 1)
     {
