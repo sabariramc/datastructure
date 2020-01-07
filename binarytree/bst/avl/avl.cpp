@@ -63,6 +63,7 @@ int AVL::delete_node(AVLNode **nav, int value)
     }
     AVLNode *temp = *nav;
     int new_height = -1;
+    int lh, rh;
     if (temp->value == value)
     {
         if (temp->left == nullptr)
@@ -79,12 +80,11 @@ int AVL::delete_node(AVLNode **nav, int value)
         {
             new_height = delete_node_by_copying(nav, (AVLNode **)&temp->left);
             (*nav)->left_height = new_height;
-            int lh = new_height;
-            int rh = (*nav)->right_height;
+            lh = new_height;
+            rh = (*nav)->right_height;
             new_height = lh > rh ? lh + 1 : rh + 1;
         }
         delete_node((Node *)temp);
-        return new_height;
     }
     else if (temp->value > value)
     {
@@ -104,10 +104,14 @@ int AVL::delete_node(AVLNode **nav, int value)
     }
     if (new_height > -1)
     {
+        if (*nav == nullptr)
+        {
+            return new_height;
+        }
         check_height_balance(nav);
         temp = *nav;
-        int lh = temp->left_height;
-        int rh = temp->right_height;
+        lh = temp->left_height;
+        rh = temp->right_height;
         return lh > rh ? lh + 1 : rh + 1;
     }
     else
@@ -155,7 +159,7 @@ void AVL::check_height_balance(AVLNode **nav)
     {
         temp = (AVLNode *)temp->left;
         balance_factor = temp->right_height - temp->left_height;
-        if (balance_factor < 0)
+        if (balance_factor <= 0)
         {
             rotation_left_left(nav);
         }
@@ -168,13 +172,13 @@ void AVL::check_height_balance(AVLNode **nav)
     {
         temp = (AVLNode *)temp->right;
         balance_factor = temp->right_height - temp->left_height;
-        if (balance_factor < 0)
+        if (balance_factor >= 0)
         {
-            rotation_right_left(nav);
+            rotation_right_right(nav);
         }
         else
         {
-            rotation_right_right(nav);
+            rotation_right_left(nav);
         }
     }
 }

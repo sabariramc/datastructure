@@ -15,5 +15,5 @@ with open("input.txt", "w") as fp:
                 if number in x:
                     x.remove(number)
             fp.write(f"{option} {number}\n")
-        fp.write("4\n")
+        # fp.write("4\n")
     fp.write("5")
