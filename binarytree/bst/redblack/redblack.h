@@ -29,16 +29,16 @@ protected:
     int delete_node(RBNode **nav, int value);
     void insert_fix_up(RBNode **nav);
     void delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent);
-    void rotation_left(RBNode **nav);
-    void rotation_right(RBNode **nav);
+    void rotation_left(RBNode *nav);
+    void rotation_right(RBNode *nav);
     void print_node(Node *node);
+    int test_red_black_rule(RBNode *nav);
 
 private:
-    RBNode **get_node_reference(RBNode **nav);
-    void rotation_left_on_parent(RBNode *nav);
-    void rotation_right_on_parent(RBNode *nav);
+    RBNode **get_node_reference(RBNode *nav);
 
 public:
     bool insert_node(int value);
     bool delete_node(int value);
+    bool test_tree_integraty();
 };

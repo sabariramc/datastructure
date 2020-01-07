@@ -8,6 +8,7 @@ using namespace std;
 int main(int argc, const char **argv)
 {
     freopen("output.txt", "w", stdout);
+    freopen("error.txt", "w", stderr);
     for (int i = 1; i < argc; i++)
     {
         cout << argv[i] << endl;

@@ -262,7 +262,8 @@ void AVL::print_node(Node *node)
 bool AVL::test_tree_integraty()
 {
     test_node_value(root);
-    test_node_height((AVLNode *)root);
+    int max_tree_height = test_node_height((AVLNode *)root);
+    cout << "Size " << size << " Tree Height " << max_tree_height << endl;
 }
 
 int AVL::test_node_height(AVLNode *nav)

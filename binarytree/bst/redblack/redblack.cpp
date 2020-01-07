@@ -31,100 +31,103 @@ bool RedBlack::delete_node(int value)
 
 void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
 {
-    if (*nav == nullptr)
-    {
-        *nav = new RBNode(value);
-        (*nav)->parent = p;
-        insert_fix_up(nav);
-        return;
-    }
     RBNode *node = *nav;
-    if (node->value > value)
+    while (*nav != nullptr)
     {
-        insert_node((RBNode **)&node->left, node, value);
+        p = node;
+        if (node->value > value)
+        {
+            nav = (RBNode **)&(node->left);
+        }
+        else
+        {
+            nav = (RBNode **)&(node->right);
+        }
+        node = *nav;
     }
-    else
-    {
-        insert_node((RBNode **)&node->right, node, value);
-    }
+    *nav = new RBNode(value);
+    (*nav)->parent = p;
+    insert_fix_up(nav);
+    return;
 }
 
 int RedBlack::delete_node(RBNode **nav, int value)
 {
-    if (*nav == nullptr)
-    {
-        return -1;
-    }
     RBNode *temp = *nav;
     RBNode *successor_parent, *successor, *fix_up_node, *fix_up_node_parent;
-    if (temp->value == value)
+    while (*nav != nullptr)
     {
-        enum COLOUR original_color = temp->color;
-        if (temp->right != nullptr && temp->left != nullptr)
+        if (temp->value == value)
         {
-            successor = (RBNode *)temp->right;
-            while (successor->left != nullptr)
-            {
-                successor = (RBNode *)successor->left;
-            }
-            original_color = successor->color;
-            successor->color = temp->color;
-            successor_parent = successor->parent;
-            successor->left = temp->left;
-            ((RBNode *)temp->left)->parent = successor;
-            successor->parent = temp->parent;
-            fix_up_node = (RBNode *)successor->right;
-            fix_up_node_parent = successor;
-            if (successor_parent != temp)
-            {
-                fix_up_node_parent = successor_parent;
-                RBNode *sucessor_right = (RBNode *)successor->right;
-                successor_parent->left = sucessor_right;
-                if (sucessor_right != nullptr)
-                    sucessor_right->parent = successor_parent;
-                successor->right = temp->right;
-                ((RBNode *)temp->right)->parent = successor;
-            }
-            *nav = successor;
-        }
-        else
-        {
-            successor_parent = temp->parent;
-            if (temp->left == nullptr)
+            enum COLOUR original_color = temp->color;
+            if (temp->right != nullptr && temp->left != nullptr)
             {
                 successor = (RBNode *)temp->right;
-            }
-            else if (temp->right == nullptr)
-            {
-                successor = (RBNode *)temp->left;
+                while (successor->left != nullptr)
+                {
+                    successor = (RBNode *)successor->left;
+                }
+                original_color = successor->color;
+                successor->color = temp->color;
+                successor_parent = successor->parent;
+                successor->left = temp->left;
+                ((RBNode *)temp->left)->parent = successor;
+                successor->parent = temp->parent;
+                fix_up_node = (RBNode *)successor->right;
+                fix_up_node_parent = successor;
+                if (successor_parent != temp)
+                {
+                    fix_up_node_parent = successor_parent;
+                    RBNode *sucessor_right = (RBNode *)successor->right;
+                    successor_parent->left = sucessor_right;
+                    if (sucessor_right != nullptr)
+                        sucessor_right->parent = successor_parent;
+                    successor->right = temp->right;
+                    ((RBNode *)temp->right)->parent = successor;
+                }
+                *nav = successor;
             }
             else
             {
-                successor = nullptr;
+                successor_parent = temp->parent;
+                if (temp->left == nullptr)
+                {
+                    successor = (RBNode *)temp->right;
+                }
+                else if (temp->right == nullptr)
+                {
+                    successor = (RBNode *)temp->left;
+                }
+                else
+                {
+                    successor = nullptr;
+                }
+                *nav = successor;
+                if (successor != nullptr)
+                {
+                    successor->parent = successor_parent;
+                }
+                fix_up_node_parent = successor_parent;
+                fix_up_node = successor;
             }
-            *nav = successor;
-            if (successor != nullptr)
+            delete_node((Node *)temp);
+            if (original_color == BLACK)
             {
-                successor->parent = successor_parent;
+                delete_fix_up(fix_up_node, fix_up_node_parent);
             }
-            fix_up_node_parent = successor_parent;
-            fix_up_node = successor;
+            return 1;
         }
-        delete_node((Node *)temp);
-        if (original_color == BLACK)
+        else if (temp->value > value)
         {
-            delete_fix_up(fix_up_node, fix_up_node_parent);
+            nav = (RBNode **)&(temp->left);
         }
-        return 1;
+        else
+        {
+            nav = (RBNode **)&(temp->right);
+        }
+        temp = *nav;
     }
-    else if (temp->value > value)
-    {
-        return delete_node((RBNode **)&(temp->left), value);
-    }
-    else
-    {
-        return delete_node((RBNode **)&(temp->right), value);
-    }
+    return -1;
 }
 
 void RedBlack::insert_fix_up(RBNode **nav)
@@ -147,11 +150,11 @@ void RedBlack::insert_fix_up(RBNode **nav)
                 if (node == node->parent->right)
                 {
                     node = node->parent;
-                    rotation_left(&(node->parent));
+                    rotation_left(node);
                 }
                 node->parent->color = BLACK;
                 node->parent->parent->color = RED;
-                rotation_right(&(node->parent->parent));
+                rotation_right(node->parent->parent);
             }
         }
         else
@@ -169,11 +172,11 @@ void RedBlack::insert_fix_up(RBNode **nav)
                 if (node == node->parent->left)
                 {
                     node = node->parent;
-                    rotation_right(&(node->parent));
+                    rotation_right(node);
                 }
                 node->parent->color = BLACK;
                 node->parent->parent->color = RED;
-                rotation_left(&(node->parent->parent));
+                rotation_left(node->parent->parent);
             }
         }
     }
@@ -191,8 +194,7 @@ void RedBlack::delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent)
             {
                 sibiling->color = BLACK;
                 fix_node_parent->color = RED;
-                rotation_left_on_parent(fix_node_parent);
-                fix_node_parent = fix_node->parent;
+                rotation_left(fix_node_parent);
                 sibiling = (RBNode *)fix_node_parent->right;
             }
             RBNode *sibiling_left = (RBNode *)sibiling->left;
@@ -201,7 +203,6 @@ void RedBlack::delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent)
             {
                 sibiling->color = RED;
                 fix_node = fix_node_parent;
-                fix_node_parent = fix_node_parent->parent;
             }
             else
             {
@@ -209,14 +210,13 @@ void RedBlack::delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent)
                 {
                     sibiling_left->color = BLACK;
                     sibiling->color = RED;
-                    rotation_right((RBNode **)&(fix_node_parent->right));
-                    fix_node_parent = fix_node->parent;
+                    rotation_right(sibiling);
                     sibiling = (RBNode *)fix_node_parent->right;
                 }
                 sibiling->color = fix_node_parent->color;
                 fix_node_parent->color = BLACK;
                 ((RBNode *)sibiling->right)->color = BLACK;
-                rotation_left_on_parent(fix_node_parent);
+                rotation_left(fix_node_parent);
                 fix_node = (RBNode *)root;
             }
         }
@@ -227,8 +227,7 @@ void RedBlack::delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent)
             {
                 sibiling->color = BLACK;
                 fix_node_parent->color = RED;
-                rotation_right_on_parent(fix_node_parent);
-                fix_node_parent = fix_node->parent;
+                rotation_right(fix_node_parent);
                 sibiling = (RBNode *)fix_node_parent->left;
             }
             RBNode *sibiling_left = (RBNode *)sibiling->left;
@@ -245,65 +244,25 @@ void RedBlack::delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent)
                 {
                     sibiling_right->color = BLACK;
                     sibiling->color = RED;
-                    rotation_left((RBNode **)&(fix_node_parent->left));
-                    fix_node_parent = fix_node->parent;
+                    rotation_left(sibiling);
                     sibiling = (RBNode *)fix_node_parent->left;
                 }
                 sibiling->color = fix_node_parent->color;
                 fix_node_parent->color = BLACK;
                 ((RBNode *)sibiling->left)->color = BLACK;
-                rotation_right_on_parent(fix_node_parent);
+                rotation_right(fix_node_parent);
                 fix_node = (RBNode *)root;
             }
         }
+        fix_node_parent = fix_node->parent;
     }
     if (fix_node != nullptr)
         fix_node->color = BLACK;
 }
 
-void RedBlack::rotation_left_on_parent(RBNode *fix_node_parent)
+void RedBlack::rotation_left(RBNode *temp)
 {
-    if (fix_node_parent == root)
-    {
-        rotation_left((RBNode **)&root);
-    }
-    else
-    {
-        RBNode *temp = fix_node_parent->parent;
-        if (temp->left == fix_node_parent)
-        {
-            rotation_left((RBNode **)&temp->left);
-        }
-        else
-        {
-            rotation_left((RBNode **)&temp->right);
-        }
-    }
-}
-
-void RedBlack::rotation_right_on_parent(RBNode *fix_node_parent)
-{
-    if (fix_node_parent == root)
-    {
-        rotation_right((RBNode **)&root);
-    }
-    else
-    {
-        RBNode *temp = fix_node_parent->parent;
-        if (temp->left == fix_node_parent)
-        {
-            rotation_right((RBNode **)&temp->left);
-        }
-        else
-        {
-            rotation_right((RBNode **)&temp->right);
-        }
-    }
-}
-
-void RedBlack::rotation_left(RBNode **nav)
-{
-    nav = get_node_reference(nav);
+    RBNode **nav = get_node_reference(temp);
     RBNode *node = *nav;
     RBNode *right = (RBNode *)node->right;
     RBNode *right_left = (RBNode *)right->left;
@@ -318,9 +277,9 @@ void RedBlack::rotation_left(RBNode **nav)
     }
 }
 
-void RedBlack::rotation_right(RBNode **nav)
+void RedBlack::rotation_right(RBNode *temp)
 {
-    nav = get_node_reference(nav);
+    RBNode **nav = get_node_reference(temp);
     RBNode *node = *nav;
     RBNode *left = (RBNode *)node->left;
     RBNode *left_right = (RBNode *)left->right;
@@ -335,9 +294,9 @@ void RedBlack::rotation_right(RBNode **nav)
     }
 }
 
-RedBlack::RBNode **RedBlack::get_node_reference(RBNode **nav)
+RedBlack::RBNode **RedBlack::get_node_reference(RBNode *node)
 {
-    RBNode *node = *nav;
+    RBNode **nav = nullptr;
     if (node == root)
     {
         nav = (RBNode **)&root;
@@ -357,4 +316,33 @@ void RedBlack::print_node(Node *node)
 {
     RBNode *temp = (RBNode *)node;
     cout << temp->value << "(" << temp->color << ")";
+}
+
+bool RedBlack::test_tree_integraty()
+{
+    test_node_value(root);
+    cout << "Size " << size << " Black height " << test_red_black_rule((RBNode *)root) << endl;
+}
+
+int RedBlack::test_red_black_rule(RBNode *nav)
+{
+    if (nav == nullptr)
+    {
+        return 0;
+    }
+    int left_black_height = test_red_black_rule((RBNode *)nav->left);
+    int right_black_height = test_red_black_rule((RBNode *)nav->right);
+    if (left_black_height != right_black_height)
+    {
+        cout << "Equal black height violate at " << nav->value << endl;
+    }
+    if (nav->parent != nullptr && nav->parent->color == RED && nav->color == RED)
+    {
+        std::cout << "RED node with RED children at " << nav->value << std::endl;
+    }
+    if (nav->color == BLACK)
+    {
+        left_black_height++;
+    }
+    return left_black_height;
 }
