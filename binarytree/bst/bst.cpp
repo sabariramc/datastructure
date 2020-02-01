@@ -47,3 +47,24 @@ int BST::test_node_value(Node *nav)
     }
     return max;
 }
+
+const int *BST::search(int value)
+{
+    Node *nav = root;
+    while (nav != nullptr)
+    {
+        if (nav->value == value)
+        {
+            return &(nav->value);
+        }
+        else if (nav->value < value)
+        {
+            nav = nav->right;
+        }
+        else
+        {
+            nav = nav->left;
+        }
+    }
+    return nullptr;
+}

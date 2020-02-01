@@ -8,4 +8,5 @@ protected:
 public:
     bool insert_node(int value);
     virtual bool test_tree_integraty();
+    const int *search(int value);
 };
