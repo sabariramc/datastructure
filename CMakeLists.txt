@@ -19,6 +19,9 @@ list(APPEND EXTRA_LIBS bst)
 list(APPEND EXTRA_LIBS avl)
 list(APPEND EXTRA_LIBS redblack)
 
+add_subdirectory(mtree)
+list(APPEND EXTRA_LIBS btree)
+
 add_subdirectory(test)
 list(APPEND EXTRA_LIBS test)
 
