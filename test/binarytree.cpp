@@ -1,10 +1,10 @@
-#include "avl.h"
+#include "redblack.h"
 #include <iostream>
 using namespace std;
 
 void test_binarytree()
 {
-    AVL *s = new AVL();
+    RedBlack *s = new RedBlack();
     int instruction;
     int value;
     while (true)
