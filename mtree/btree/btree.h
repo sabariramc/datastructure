@@ -1,7 +1,8 @@
 class BTree
 {
 private:
-    int key_size;
+    const int minimum_degree;
+    const int max_key_size;
     const int min_key_requirement;
 
 protected:
@@ -31,9 +32,14 @@ protected:
             next_ptr = nullptr;
         }
     };
+    Node *root;
 
 public:
+    BTree(int degree);
+    ~BTree();
     bool insert_node(int value);
     bool delete_node(int value);
-    int search_value(int value);
+    const int *search_value(int value);
+    bool test_tree_integraty();
+    void print();
 };
