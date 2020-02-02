@@ -30,6 +30,20 @@ void test_binarytree()
             break;
         case 5:
             return;
+        case 6:
+            cin >> value;
+            {
+                const int *ptr = s->search(value);
+                if (ptr == nullptr)
+                {
+                    cout << "Value " << value << " not in tree\n";
+                }
+                else
+                {
+                    cout << "Value " << *ptr << " Found in tree\n";
+                }
+            }
+            break;
         default:
             cout << "Invalid Instruction : " << instruction << endl;
             return;
