@@ -20,7 +20,10 @@ int AVL::insert_node(AVLNode **nav, int value)
         return 1;
     }
     AVLNode *temp = *nav;
-    if ((*nav)->value > value)
+    if (temp->value == value)
+    {
+    }
+    else if ((*nav)->value > value)
     {
         AVLNode **left = (AVLNode **)&((*nav)->left);
         temp->left_height = insert_node(left, value);

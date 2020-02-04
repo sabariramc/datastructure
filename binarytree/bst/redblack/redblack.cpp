@@ -35,7 +35,11 @@ void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
     while (*nav != nullptr)
     {
         p = node;
-        if (node->value > value)
+        if (node->value == value)
+        {
+            return;
+        }
+        else if (node->value > value)
         {
             nav = (RBNode **)&(node->left);
         }
