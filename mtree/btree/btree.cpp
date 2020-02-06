@@ -9,6 +9,7 @@ BTree::BTree(int minimum_degree) : minimum_degree(minimum_degree), max_key_size(
         throw "Minimum degree cannot be less than 2";
     }
     root = new Node(max_key_size);
+    size = 0;
 }
 
 BTree::~BTree()
@@ -102,7 +103,10 @@ bool BTree::add(int value)
         temp->next_ptr[0] = nav;
         split_node(temp, 0);
     }
-    return add_in_non_full_node(root, value);
+    bool flag = add_in_non_full_node(root, value);
+    if (flag)
+        size++;
+    return flag;
 }
 
 bool BTree::add_in_non_full_node(Node *nav, int value)
@@ -270,7 +274,7 @@ bool BTree::test_properties(Node *nav, int height, RedBlack height_track, Stack 
         bool height_property = test_properties(nav->next_ptr[i], height + 1, height_track, inorder_value);
         if (!height_property)
         {
-            cout << "Height property is violated at node that has starting key " << nav->key[0] << endl;
+            cout << "Height property is violated for the branch that has the leaf node with starting key " << nav->key[0] << endl;
         }
         try
         {
@@ -286,4 +290,5 @@ bool BTree::test_properties(Node *nav, int height, RedBlack height_track, Stack 
         inorder_value.push(nav->key[i]);
     }
     test_properties(nav->next_ptr[i], height + 1, height_track, inorder_value);
+    return true;
 }

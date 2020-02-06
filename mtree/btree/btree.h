@@ -36,6 +36,7 @@ private:
             next_ptr = nullptr;
         }
     };
+    int size;
     Node *root;
     void split_node(Node *nav, int child_index);
     bool add_in_non_full_node(Node *nav, int value);
@@ -53,6 +54,10 @@ public:
     const int *search(int value);
     bool test_integrity();
     void print();
+    int get_size()
+    {
+        return size;
+    }
 };
 
 #endif // !BTREE_H
