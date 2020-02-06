@@ -1,45 +1,58 @@
+#include "queue.h"
+#include "redblack.h"
+
+#ifndef BTREE_H
+#define BTREE_H
+
 class BTree
 {
 private:
     const int minimum_degree;
     const int max_key_size;
     const int min_key_requirement;
-
-protected:
     struct Node
     {
         bool is_leaf;
         int no_of_key;
-        int *value;
+        int *key;
         Node **next_ptr;
         Node(int key_size)
         {
             is_leaf = true;
             no_of_key = 0;
-            value = new int[key_size];
+            key = new int[key_size];
             next_ptr = new Node *[key_size + 1] { nullptr };
         }
         ~Node()
         {
-            delete[] value;
+            delete[] key;
             for (int i = 0; i <= no_of_key; i++)
             {
                 delete next_ptr[i];
                 next_ptr[i] = nullptr;
             }
             delete[] next_ptr;
-            value = nullptr;
+            key = nullptr;
             next_ptr = nullptr;
         }
     };
     Node *root;
+    void split_node(Node *nav, int child_index);
+    bool add_in_non_full_node(Node *nav, int value);
+    bool check_key(Node *nav, int value);
+    int get_next_ptr_index(Node *nav, int value);
+    void print_inorder(Node *nav);
+    void print_preorder(Node *nav);
+    void test_properties(Node *nav, int height, RedBlack height_track, Queue inorder_value);
 
 public:
     BTree(int degree);
     ~BTree();
-    bool insert_node(int value);
-    bool delete_node(int value);
-    const int *search_value(int value);
-    bool test_tree_integraty();
+    bool add(int value);
+    bool remove(int value);
+    const int *search(int value);
+    bool test_integrity();
     void print();
 };
+
+#endif // !BTREE_H

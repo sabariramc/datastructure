@@ -1,4 +1,4 @@
-x = list(range(0, 100, 3))
+x = [10]
 
 
 def binary_search(value):
@@ -23,7 +23,7 @@ def binary_search(value):
     return x[mid], i
 
 
-search_list = list(range(-10, 130))
+search_list = list(range(5, 15))
 
 with open("output.txt", "w") as fp:
     for i in search_list:
