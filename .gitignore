@@ -1,4 +1,6 @@
 bin/
 build/
 debug/
-*.txt
+testcases/*.txt
+output/*.txt
+test/*.txt
