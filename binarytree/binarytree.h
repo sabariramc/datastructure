@@ -44,6 +44,10 @@ public:
     virtual void print_inorder(Node *temp);
     virtual void print_preorder(Node *temp);
     virtual void print_postorder(Node *temp);
+    int get_size()
+    {
+        return size;
+    }
 };
 
 #endif // !BINARYTREE_H
