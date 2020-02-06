@@ -1,3 +1,6 @@
+
+#ifndef BINARYTREE_H
+#define BINARYTREE_H
 class BinaryTree
 {
 protected:
@@ -42,3 +45,5 @@ public:
     virtual void print_preorder(Node *temp);
     virtual void print_postorder(Node *temp);
 };
+
+#endif // !BINARYTREE_H

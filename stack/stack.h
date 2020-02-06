@@ -1,5 +1,8 @@
 #include "linkedlist.h"
 
+#ifndef STACH_H
+#define STACH_H
+
 class Stack
 {
 public:
@@ -12,3 +15,5 @@ public:
 private:
     DoublyLinkedList stack;
 };
+
+#endif // !STACH_H

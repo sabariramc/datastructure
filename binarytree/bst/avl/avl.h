@@ -1,5 +1,8 @@
 #include "bst.h"
 
+#ifndef AVL_H
+#define AVL_H
+
 class AVL : public BST
 {
 protected:
@@ -31,3 +34,5 @@ public:
     bool test_tree_integraty();
     bool delete_node(int value);
 };
+
+#endif // !AVL_H

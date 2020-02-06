@@ -1,5 +1,8 @@
 #include "linkedlist.h"
 
+#ifndef QUEUE_H
+#define QUEUE_H
+
 class Queue
 {
 public:
@@ -12,3 +15,5 @@ public:
 private:
     DoublyLinkedList queue;
 };
+
+#endif // !QUEUE_H

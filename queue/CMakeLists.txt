@@ -6,4 +6,4 @@ target_include_directories(
 
 list(APPEND EXTRA_LIBS linkedlist)
 
-target_link_libraries(queue PUBLIC ${EXTRA_LIBS})
+target_link_libraries(queue PRIVATE ${EXTRA_LIBS})

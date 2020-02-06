@@ -1,5 +1,8 @@
 #include "binarytree.h"
 
+#ifndef BST_H
+#define BST_H
+
 class BST : public BinaryTree
 {
 protected:
@@ -10,3 +13,5 @@ public:
     virtual bool test_tree_integraty();
     const int *search(int value);
 };
+
+#endif // !BST_H

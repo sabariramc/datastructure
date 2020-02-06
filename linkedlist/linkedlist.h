@@ -1,3 +1,6 @@
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
+
 class DoublyLinkedList
 {
 public:
@@ -51,3 +54,5 @@ private:
     };
     Node *head = nullptr, *tail = nullptr;
 };
+
+#endif /*LINKEDLIST_H*/

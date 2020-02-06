@@ -1,5 +1,8 @@
 #include "bst.h"
 
+#ifndef REDBLACK_H
+#define REDBLACK_H
+
 enum COLOUR
 {
     RED,
@@ -42,3 +45,5 @@ public:
     bool delete_node(int value);
     bool test_tree_integraty();
 };
+
+#endif // !REDBLACK_H
