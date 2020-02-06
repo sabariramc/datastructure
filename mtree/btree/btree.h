@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "stack.h"
 #include "redblack.h"
 
 #ifndef BTREE_H
@@ -43,7 +43,7 @@ private:
     int get_next_ptr_index(Node *nav, int value);
     void print_inorder(Node *nav);
     void print_preorder(Node *nav);
-    void test_properties(Node *nav, int height, RedBlack height_track, Queue inorder_value);
+    bool test_properties(Node *nav, int height, RedBlack height_track, Stack inorder_value);
 
 public:
     BTree(int degree);

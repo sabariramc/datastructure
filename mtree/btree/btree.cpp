@@ -241,26 +241,49 @@ void BTree::print_preorder(Node *nav)
 
 bool BTree::test_integrity()
 {
-    Queue inorder_value;
+    Stack inorder_value;
     RedBlack height_track;
     test_properties(root, 0, height_track, inorder_value);
 }
 
-void BTree::test_properties(Node *nav, int height, RedBlack height_track, Queue inorder_value)
+bool BTree::test_properties(Node *nav, int height, RedBlack height_track, Stack inorder_value)
 {
     if (nav == nullptr)
     {
-
-        return;
+        if (height_track.get_size() == 0)
+            height_track.insert_node(height);
+        else if (height_track.search(height) == nullptr)
+            return false;
+        return true;
     }
     int i = 0;
     if (nav != root && nav->no_of_key < min_key_requirement)
     {
-        cout << "Min Key requirement is violated at node that has starting key " << nav->key[0] << endl;
+        cout << "Min key requirement is violated at node that has starting key " << nav->key[0] << endl;
+    }
+    if (nav->no_of_key > max_key_size)
+    {
+        cout << "Max key requirement is violated at node that has starting key " << nav->key[0] << endl;
     }
     for (; i < nav->no_of_key; i++)
     {
-        test_properties(nav->next_ptr[i], height + 1, height_track, inorder_value);
+        bool height_property = test_properties(nav->next_ptr[i], height + 1, height_track, inorder_value);
+        if (!height_property)
+        {
+            cout << "Height property is violated at node that has starting key " << nav->key[0] << endl;
+        }
+        try
+        {
+            int value = inorder_value.peak();
+            if (value > nav->key[i])
+            {
+                cout << "Key order property is violated at node that has starting key " << nav->key[0] << endl;
+            }
+        }
+        catch (const std::exception &e)
+        {
+        }
+        inorder_value.push(nav->key[i]);
     }
     test_properties(nav->next_ptr[i], height + 1, height_track, inorder_value);
 }
