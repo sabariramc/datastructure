@@ -28,7 +28,7 @@ protected:
         }
     };
     using BinaryTree::delete_node;
-    void insert_node(RBNode **nav, RBNode *p, int &value);
+    bool insert_node(RBNode **nav, RBNode *p, int &value);
     int delete_node(RBNode **nav, int value);
     void insert_fix_up(RBNode **nav);
     void delete_fix_up(RBNode *fix_node, RBNode *fix_node_parent);

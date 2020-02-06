@@ -6,8 +6,8 @@ bool RedBlack::insert_node(int value)
 {
     cout << "Insert: " << value << endl;
     RBNode **nav = (RBNode **)&root;
-    insert_node(nav, nullptr, value);
-    size++;
+    if (insert_node(nav, nullptr, value))
+        size++;
     return true;
 }
 
@@ -29,7 +29,7 @@ bool RedBlack::delete_node(int value)
     }
 }
 
-void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
+bool RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
 {
     RBNode *node = *nav;
     while (*nav != nullptr)
@@ -37,7 +37,7 @@ void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
         p = node;
         if (node->value == value)
         {
-            return;
+            return false;
         }
         else if (node->value > value)
         {
@@ -52,7 +52,7 @@ void RedBlack::insert_node(RBNode **nav, RBNode *p, int &value)
     *nav = new RBNode(value);
     (*nav)->parent = p;
     insert_fix_up(nav);
-    return;
+    return true;
 }
 
 int RedBlack::delete_node(RBNode **nav, int value)

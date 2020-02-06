@@ -6,8 +6,8 @@ bool AVL::insert_node(int value)
 {
     cout << "Insert: " << value << endl;
     AVLNode **nav = (AVLNode **)&root;
-    insert_node(nav, value);
-    size++;
+    if (insert_node(nav, value) != -1)
+        size++;
     return true;
 }
 
@@ -22,6 +22,7 @@ int AVL::insert_node(AVLNode **nav, int value)
     AVLNode *temp = *nav;
     if (temp->value == value)
     {
+        return -1;
     }
     else if ((*nav)->value > value)
     {
