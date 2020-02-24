@@ -1,11 +1,11 @@
 #include <exception>
+using namespace std;
 
-class ListEmpty : std::exception
+class ListEmpty : public std::exception
 {
 public:
     virtual const char *what() const throw()
     {
-        char a[14] = "List is Empty";
-        return a;
+        return "List is Empty";
     }
 };

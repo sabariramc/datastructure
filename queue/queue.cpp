@@ -17,7 +17,7 @@ int Queue::size()
     return queue.get_size();
 }
 
-int Queue::peak()
+const int *Queue::peak()
 {
     return queue.peak_head();
 }

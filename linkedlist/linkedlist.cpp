@@ -13,18 +13,18 @@ void DoublyLinkedList::insert_at_tail(int value)
     insert(value, position_tail);
 }
 
-int DoublyLinkedList::peak_head()
+const int *DoublyLinkedList::peak_head()
 {
     if (size == 0)
-        throw ListEmpty();
-    return head->value;
+        return nullptr;
+    return &(head->value);
 }
 
-int DoublyLinkedList::peak_tail()
+const int *DoublyLinkedList::peak_tail()
 {
     if (size == 0)
-        throw ListEmpty();
-    return tail->value;
+        return nullptr;
+    return &(tail->value);
 }
 
 int DoublyLinkedList::get_head()

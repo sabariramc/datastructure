@@ -20,45 +20,116 @@ BTree::~BTree()
 
 const int *BTree::search(int value)
 {
-    Node *nav;
+    Node *nav = root;
     while (nav != nullptr)
     {
-        int start = 0;
-        int end = nav->no_of_key - 1;
-        int next_ptr_index;
-        int *key = nav->key;
-        while (start < end)
+        int *search_result = check_key(nav, value);
+        int target_index = *(search_result + 1);
+        if (*search_result == 1)
         {
-            int diff = end - start;
-            int mid = (start + end) / 2;
-            if (key[mid] == value)
+            return nav->key + target_index;
+        }
+        nav = nav->next_ptr[target_index];
+    }
+
+    return nullptr;
+}
+
+bool BTree::add(int value)
+{
+    cout << "Insert: " << value << endl;
+    Node *nav = root;
+    if (nav->no_of_key == max_key_size)
+    {
+        Node *temp = new Node(max_key_size);
+        root = temp;
+        temp->is_leaf = false;
+        temp->next_ptr[0] = nav;
+        split_node(temp, 0);
+    }
+    bool flag = add_in_non_full_node(root, value);
+    if (flag)
+        size++;
+    return flag;
+}
+
+bool BTree::remove(int value)
+{
+    Node *nav = root;
+    while (nav != nullptr)
+    {
+        int *search_result = check_key(nav, value);
+        if (*search_result == 1)
+        {
+            int key_index = *(search_result + 1);
+            if (nav->is_leaf)
             {
-                return key + mid;
-            }
-            else if (diff <= 1)
-            {
-                if (value < key[start])
-                    next_ptr_index = start;
-                else if (value > key[end])
-                    next_ptr_index = end + 1;
-                else if (value == key[end])
-                    return key + end;
-                else
-                    next_ptr_index = end;
-                break;
-            }
-            else if (key[mid] > value)
-            {
-                end = mid;
+                delete_key(nav, key_index);
             }
             else
             {
-                start = mid;
+                Node *left = nav->next_ptr[key_index];
+                Node *right = nav->next_ptr[key_index + 1];
+                if (left->no_of_key >= minimum_degree)
+                {
+                    Node *predecessor = left;
+                    while (predecessor->is_leaf == false)
+                    {
+                        predecessor = decend(predecessor, predecessor->no_of_key);
+                    }
+                    int replace_key_index = predecessor->no_of_key - 1;
+                    nav[key_index] = predecessor->key[replace_key_index];
+                    delete_key(predecessor, replace_key_index);
+                }
+                else if (right->no_of_key >= minimum_degree)
+                {
+                    Node *successor = right;
+                    while (successor->is_leaf == false)
+                    {
+                        successor = decend(successor, 0);
+                    }
+                    int replace_key_index = 0;
+                    nav[key_index] = successor->key[replace_key_index];
+                    delete_key(successor, 0);
+                }
+                else
+                {
+                    int from_index = left->no_of_key;
+                    left->key[from_index++] = nav->key[key_index];
+                    for (int i = 0; i < right->no_of_key; i++, from_index++)
+                    {
+                        left->key[from_index] = right->key[i];
+                        left->next_ptr[from_index] = right->next_ptr[i];
+                    }
+                    left->next_ptr[from_index] = right->next_ptr[right->no_of_key];
+                    left->no_of_key += right->no_of_key;
+                    nav->next_ptr[key_index + 1] = nullptr;
+                    for (int i = key_index; i < nav->no_of_key - 1; i++)
+                    {
+                        nav->key[i] = nav->key[i + 1];
+                        nav->next_ptr[i + 1] = nav->next_ptr[i + 2];
+                    }
+                    nav->no_of_key--;
+                    nav->next_ptr[nav->no_of_key] = nullptr;
+                    if (nav == root && nav->no_of_key == 0)
+                    {
+                        root = left;
+                        delete_node(nav);
+                    }
+                    delete_node(right);
+                    nav = left;
+                    continue;
+                }
             }
+            return true;
         }
-        nav = nav->next_ptr[next_ptr_index];
+        else
+        {
+            int next_child_idx = *(search_result + 1);
+            nav = decend(nav, next_child_idx);
+        }
     }
-    return nullptr;
+    return false;
 }
 
 void BTree::split_node(Node *nav, int child_index)
@@ -92,33 +163,17 @@ void BTree::split_node(Node *nav, int child_index)
     nav->no_of_key++;
 }
 
-bool BTree::add(int value)
-{
-    Node *nav = root;
-    if (nav->no_of_key == max_key_size)
-    {
-        Node *temp = new Node(max_key_size);
-        root = temp;
-        temp->is_leaf = false;
-        temp->next_ptr[0] = nav;
-        split_node(temp, 0);
-    }
-    bool flag = add_in_non_full_node(root, value);
-    if (flag)
-        size++;
-    return flag;
-}
-
 bool BTree::add_in_non_full_node(Node *nav, int value)
 {
     int no_of_keys = nav->no_of_key;
     while (!(nav->is_leaf))
     {
-        int next_ptr_index = get_next_ptr_index(nav, value);
-        if (next_ptr_index == -1)
+        int *search_result = check_key(nav, value);
+        if (*search_result == 1)
         {
             return false;
         }
+        int next_ptr_index = *(search_result + 1);
         if (nav->next_ptr[next_ptr_index]->no_of_key == max_key_size)
         {
             split_node(nav, next_ptr_index);
@@ -126,8 +181,8 @@ bool BTree::add_in_non_full_node(Node *nav, int value)
             {
                 next_ptr_index++;
             }
-            nav = nav->next_ptr[next_ptr_index];
         }
+        nav = nav->next_ptr[next_ptr_index];
     }
     int i = nav->no_of_key - 1;
     if (check_key(nav, value))
@@ -136,24 +191,45 @@ bool BTree::add_in_non_full_node(Node *nav, int value)
     {
         nav->key[i + 1] = nav->key[i];
     }
-    nav->key[i] = value;
+    nav->key[i + 1] = value;
     nav->no_of_key++;
     return true;
 }
 
-int BTree::get_next_ptr_index(Node *nav, int value)
+void BTree::delete_key(Node *nav, int index)
+{
+    for (int i = index; i < nav->no_of_key; i++)
+    {
+        nav->key[i] = i + 1;
+    }
+    nav->no_of_key--;
+}
+
+void BTree::delete_node(Node *nav)
+{
+    for (int i = 0; i <= nav->no_of_key; i++)
+    {
+        nav->next_ptr[i] = nullptr;
+    }
+    delete (nav);
+}
+
+int *BTree::check_key(Node *nav, int value)
 {
     int start = 0;
     int end = nav->no_of_key - 1;
     int next_ptr_index;
     int *key = nav->key;
-    while (start < end)
+    int *result = new int[2]{0};
+    while (start <= end)
     {
         int diff = end - start;
         int mid = (start + end) / 2;
         if (key[mid] == value)
         {
-            return -1;
+            result[0] = 1;
+            result[1] = mid;
+            return result;
         }
         else if (diff <= 1)
         {
@@ -162,7 +238,11 @@ int BTree::get_next_ptr_index(Node *nav, int value)
             else if (value > key[end])
                 next_ptr_index = end + 1;
             else if (value == key[end])
-                return -1;
+            {
+                result[0] = 1;
+                result[1] = end;
+                return result;
+            }
             else
                 next_ptr_index = end;
             break;
@@ -176,31 +256,9 @@ int BTree::get_next_ptr_index(Node *nav, int value)
             start = mid;
         }
     }
-    return next_ptr_index;
-}
-
-bool BTree::check_key(Node *nav, int value)
-{
-    int start = 0;
-    int end = nav->no_of_key - 1;
-    int *key = nav->key;
-    while (start < end)
-    {
-        int mid = (start + end) / 2;
-        if (key[mid] == value)
-        {
-            return true;
-        }
-        else if (key[mid] > value)
-        {
-            end = mid - 1;
-        }
-        else
-        {
-            start = mid + 1;
-        }
-    }
-    return false;
+    result[0] = 0;
+    result[1] = next_ptr_index;
+    return result;
 }
 
 void BTree::print()
@@ -209,7 +267,7 @@ void BTree::print()
     print_inorder(root);
     cout << endl;
     cout << "Pre-order traversal:";
-    print_inorder(root);
+    print_preorder(root);
     cout << endl;
 }
 
@@ -250,7 +308,7 @@ bool BTree::test_integrity()
     test_properties(root, 0, height_track, inorder_value);
 }
 
-bool BTree::test_properties(Node *nav, int height, RedBlack height_track, Stack inorder_value)
+bool BTree::test_properties(Node *nav, int height, RedBlack &height_track, Stack &inorder_value)
 {
     if (nav == nullptr)
     {
@@ -276,16 +334,10 @@ bool BTree::test_properties(Node *nav, int height, RedBlack height_track, Stack 
         {
             cout << "Height property is violated for the branch that has the leaf node with starting key " << nav->key[0] << endl;
         }
-        try
+        const int *value = inorder_value.peak();
+        if (value != nullptr && *value > nav->key[i])
         {
-            int value = inorder_value.peak();
-            if (value > nav->key[i])
-            {
-                cout << "Key order property is violated at node that has starting key " << nav->key[0] << endl;
-            }
-        }
-        catch (const std::exception &e)
-        {
+            cout << "Key order property is violated at node that has starting key " << nav->key[0] << endl;
         }
         inorder_value.push(nav->key[i]);
     }

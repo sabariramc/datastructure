@@ -7,7 +7,7 @@ class Queue
 {
 public:
     void enqueue(int value);
-    int peak();
+    const int *peak();
     int dequeue();
     int size();
     void print();

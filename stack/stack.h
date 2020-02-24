@@ -7,7 +7,7 @@ class Stack
 {
 public:
     void push(int value);
-    int peak();
+    const int *peak();
     int pop();
     int size();
     void print();

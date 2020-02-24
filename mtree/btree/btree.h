@@ -20,7 +20,7 @@ private:
         {
             is_leaf = true;
             no_of_key = 0;
-            key = new int[key_size];
+            key = new int[key_size]{0};
             next_ptr = new Node *[key_size + 1] { nullptr };
         }
         ~Node()
@@ -40,11 +40,13 @@ private:
     Node *root;
     void split_node(Node *nav, int child_index);
     bool add_in_non_full_node(Node *nav, int value);
-    bool check_key(Node *nav, int value);
-    int get_next_ptr_index(Node *nav, int value);
+    int *check_key(Node *nav, int value);
     void print_inorder(Node *nav);
     void print_preorder(Node *nav);
-    bool test_properties(Node *nav, int height, RedBlack height_track, Stack inorder_value);
+    bool test_properties(Node *nav, int height, RedBlack &height_track, Stack &inorder_value);
+    Node *decend(Node *nav, int child_index);
+    void delete_key(Node *nav, int value);
+    void delete_node(Node *nav);
 
 public:
     BTree(int degree);

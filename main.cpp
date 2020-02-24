@@ -7,9 +7,9 @@ using namespace std;
 
 int main(int argc, const char **argv)
 {
-    // freopen("output.txt", "w", stdout);
-    // freopen("testcases/input_7.txt", "r", stdin);
-    test_binarytree();
+    freopen("output/output.txt", "w", stdout);
+    freopen("testcases/input_7.txt", "r", stdin);
+    test_btree();
     // freopen("error.txt", "w", stderr);
     // for (int i = 1; i < argc; i++)
     // {

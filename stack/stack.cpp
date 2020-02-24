@@ -17,7 +17,7 @@ int Stack::size()
     return stack.get_size();
 }
 
-int Stack::peak()
+const int *Stack::peak()
 {
     return stack.peak_head();
 }

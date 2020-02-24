@@ -8,8 +8,8 @@ public:
     void insert_at_head(int value);
     int get_head();
     int get_tail();
-    int peak_head();
-    int peak_tail();
+    const int *peak_head();
+    const int *peak_tail();
     int get_size();
     void print();
     DoublyLinkedList()
