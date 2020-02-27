@@ -56,9 +56,18 @@ bool BTree::add(int value)
 bool BTree::remove(int value)
 {
     Node *nav = root;
+    bool need_search = true;
+    int *search_result = nullptr;
     while (nav != nullptr)
     {
-        int *search_result = check_key(nav, value);
+        if (need_search)
+        {
+            search_result = check_key(nav, value);
+        }
+        else
+        {
+            need_search = true;
+        }
         if (*search_result == 1)
         {
             int key_index = *(search_result + 1);
@@ -94,14 +103,15 @@ bool BTree::remove(int value)
                 }
                 else
                 {
-                    int from_index = left->no_of_key;
-                    left->key[from_index++] = nav->key[key_index];
-                    for (int i = 0; i < right->no_of_key; i++, from_index++)
+                    int to_index = left->no_of_key;
+                    *(search_result + 1) = to_index;
+                    left->key[to_index++] = nav->key[key_index];
+                    for (int i = 0; i < right->no_of_key; i++, to_index++)
                     {
-                        left->key[from_index] = right->key[i];
-                        left->next_ptr[from_index] = right->next_ptr[i];
+                        left->key[to_index] = right->key[i];
+                        left->next_ptr[to_index] = right->next_ptr[i];
                     }
-                    left->next_ptr[from_index] = right->next_ptr[right->no_of_key];
+                    left->next_ptr[to_index] = right->next_ptr[right->no_of_key];
                     left->no_of_key += right->no_of_key;
                     nav->next_ptr[key_index + 1] = nullptr;
                     for (int i = key_index; i < nav->no_of_key - 1; i++)
@@ -109,8 +119,8 @@ bool BTree::remove(int value)
                         nav->key[i] = nav->key[i + 1];
                         nav->next_ptr[i + 1] = nav->next_ptr[i + 2];
                     }
-                    nav->no_of_key--;
                     nav->next_ptr[nav->no_of_key] = nullptr;
+                    nav->no_of_key--;
                     if (nav == root && nav->no_of_key == 0)
                     {
                         root = left;
@@ -118,6 +128,7 @@ bool BTree::remove(int value)
                     }
                     delete_node(right);
                     nav = left;
+                    need_search = false;
                     continue;
                 }
             }
@@ -194,6 +205,72 @@ bool BTree::add_in_non_full_node(Node *nav, int value)
     nav->key[i + 1] = value;
     nav->no_of_key++;
     return true;
+}
+
+BTree::Node *BTree ::decend(Node *nav, int next_ptr_index)
+{
+    if (nav->is_leaf)
+        return nullptr;
+    Node *decend_to_child = nav->next_ptr[next_ptr_index];
+    if (decend_to_child->no_of_key >= minimum_degree)
+        return decend_to_child;
+    int left_sibiling_index = next_ptr_index - 1;
+    int right_sibiling_index = next_ptr_index + 1;
+    if (left_sibiling_index >= 0 && nav->next_ptr[left_sibiling_index]->no_of_key >= minimum_degree)
+    {
+        Node *left_sibiling = nav->next_ptr[left_sibiling_index];
+        int key_from_sibiling = left_sibiling->key[left_sibiling->no_of_key - 1];
+        Node *child_from_sibiling = left_sibiling->next_ptr[left_sibiling->no_of_key];
+        left_sibiling->next_ptr[left_sibiling->no_of_key] = nullptr;
+        left_sibiling->no_of_key--;
+        for (int i = decend_to_child->no_of_key; i > 0; i--)
+        {
+            decend_to_child->key[i] = decend_to_child->key[i - 1];
+            decend_to_child->next_ptr[i + 1] = decend_to_child->next_ptr[i];
+        }
+        decend_to_child->next_ptr[1] = decend_to_child->next_ptr[0];
+
+        decend_to_child->next_ptr[0] = child_from_sibiling;
+        decend_to_child->key[0] = nav->key[next_ptr_index - 1];
+        decend_to_child->no_of_key++;
+        nav->key[next_ptr_index - 1] = key_from_sibiling;
+        return decend_to_child;
+    }
+    else if (right_sibiling_index <= nav->no_of_key && nav->next_ptr[right_sibiling_index]->no_of_key >= minimum_degree)
+    {
+        Node *right_sibiling = nav->next_ptr[right_sibiling_index];
+        int key_from_sibiling = right_sibiling->key[0];
+        Node *child_from_sibiling = right_sibiling->next_ptr[0];
+        for (int i = 0; i <= right_sibiling->no_of_key; i++)
+        {
+            right_sibiling->key[i] = right_sibiling->key[i + 1];
+            right_sibiling->next_ptr[i] = right_sibiling->next_ptr[i + 1];
+        }
+        right_sibiling->next_ptr[right_sibiling->no_of_key] = nullptr;
+        right_sibiling->no_of_key--;
+
+        decend_to_child->key[decend_to_child->no_of_key] = nav->key[next_ptr_index];
+        decend_to_child->no_of_key++;
+        decend_to_child->next_ptr[decend_to_child->no_of_key] = child_from_sibiling;
+        nav->key[next_ptr_index] = key_from_sibiling;
+        return decend_to_child;
+    }
+    else
+    {
+        if (left_sibiling_index >= 0)
+        {
+        }
+        else
+        {
+        }
+        nav->next_ptr[nav->no_of_key] = nullptr;
+        nav->no_of_key--;
+        if (nav == root && nav->no_of_key == 0)
+        {
+            root = left;
+            delete_node(nav);
+        }
+    }
 }
 
 void BTree::delete_key(Node *nav, int index)
