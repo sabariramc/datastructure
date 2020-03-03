@@ -27,7 +27,7 @@ const int *BTree::search(int value)
         int target_index = *(search_result + 1);
         if (*search_result == 1)
         {
-            return nav->key + target_index;
+            return &(nav->key[target_index]);
         }
         nav = nav->next_ptr[target_index];
     }
@@ -37,15 +37,13 @@ const int *BTree::search(int value)
 
 bool BTree::add(int value)
 {
-    cout << "Insert: " << value << endl;
-    Node *nav = root;
-    if (nav->no_of_key == max_key_size)
+    if (root->no_of_key == max_key_size)
     {
         Node *temp = new Node(max_key_size);
-        root = temp;
         temp->is_leaf = false;
-        temp->next_ptr[0] = nav;
+        temp->next_ptr[0] = root;
         split_node(temp, 0);
+        root = temp;
     }
     bool flag = add_in_non_full_node(root, value);
     if (flag)
@@ -87,7 +85,7 @@ bool BTree::remove(int value)
                         predecessor = decend(predecessor, predecessor->no_of_key);
                     }
                     int replace_key_index = predecessor->no_of_key - 1;
-                    nav[key_index] = predecessor->key[replace_key_index];
+                    nav->key[key_index] = predecessor->key[replace_key_index];
                     delete_key(predecessor, replace_key_index);
                 }
                 else if (right->no_of_key >= minimum_degree)
@@ -98,7 +96,7 @@ bool BTree::remove(int value)
                         successor = decend(successor, 0);
                     }
                     int replace_key_index = 0;
-                    nav[key_index] = successor->key[replace_key_index];
+                    nav->key[key_index] = successor->key[replace_key_index];
                     delete_key(successor, 0);
                 }
                 else
@@ -132,6 +130,7 @@ bool BTree::remove(int value)
                     continue;
                 }
             }
+            size--;
             return true;
         }
         else
@@ -148,7 +147,7 @@ void BTree::split_node(Node *nav, int child_index)
     Node *new_node = new Node(max_key_size);
     Node *node_to_split = nav->next_ptr[child_index];
     new_node->is_leaf = node_to_split->is_leaf;
-    new_node->no_of_key = minimum_degree - 1;
+
     for (int i = 0; i < (minimum_degree - 1); i++)
     {
         new_node->key[i] = node_to_split->key[minimum_degree + i];
@@ -160,17 +159,19 @@ void BTree::split_node(Node *nav, int child_index)
             new_node->next_ptr[i] = node_to_split->next_ptr[minimum_degree + i];
         }
     }
-    node_to_split->no_of_key = minimum_degree - 1;
+    node_to_split->no_of_key = new_node->no_of_key = minimum_degree - 1;
     for (int i = nav->no_of_key; i > child_index; i--)
     {
         nav->next_ptr[i + 1] = nav->next_ptr[i];
+        nav->key[i] = nav->key[i - 1];
     }
     nav->next_ptr[child_index + 1] = new_node;
-    for (int i = nav->no_of_key - 1; i >= child_index; i--)
-    {
-        nav->key[i + 1] = nav->key[i];
-    }
     nav->key[child_index] = node_to_split->key[minimum_degree - 1];
+    for (int i = node_to_split->no_of_key; i < max_key_size; i++)
+    {
+        node_to_split->key[i] = 0;
+        node_to_split->next_ptr[i + 1] = nullptr;
+    }
     nav->no_of_key++;
 }
 
@@ -195,9 +196,10 @@ bool BTree::add_in_non_full_node(Node *nav, int value)
         }
         nav = nav->next_ptr[next_ptr_index];
     }
-    int i = nav->no_of_key - 1;
-    if (check_key(nav, value))
+    int *key_check_result = check_key(nav, value);
+    if (*key_check_result)
         return false;
+    int i = nav->no_of_key - 1;
     for (; i >= 0 && nav->key[i] > value; i--)
     {
         nav->key[i + 1] = nav->key[i];
@@ -222,14 +224,13 @@ BTree::Node *BTree ::decend(Node *nav, int next_ptr_index)
         int key_from_sibiling = left_sibiling->key[left_sibiling->no_of_key - 1];
         Node *child_from_sibiling = left_sibiling->next_ptr[left_sibiling->no_of_key];
         left_sibiling->next_ptr[left_sibiling->no_of_key] = nullptr;
-        left_sibiling->no_of_key--;
+        left_sibiling->key[--left_sibiling->no_of_key] = 0;
+        decend_to_child->next_ptr[decend_to_child->no_of_key + 1] = decend_to_child->next_ptr[decend_to_child->no_of_key];
         for (int i = decend_to_child->no_of_key; i > 0; i--)
         {
             decend_to_child->key[i] = decend_to_child->key[i - 1];
-            decend_to_child->next_ptr[i + 1] = decend_to_child->next_ptr[i];
+            decend_to_child->next_ptr[i] = decend_to_child->next_ptr[i - 1];
         }
-        decend_to_child->next_ptr[1] = decend_to_child->next_ptr[0];
-
         decend_to_child->next_ptr[0] = child_from_sibiling;
         decend_to_child->key[0] = nav->key[next_ptr_index - 1];
         decend_to_child->no_of_key++;
@@ -241,14 +242,14 @@ BTree::Node *BTree ::decend(Node *nav, int next_ptr_index)
         Node *right_sibiling = nav->next_ptr[right_sibiling_index];
         int key_from_sibiling = right_sibiling->key[0];
         Node *child_from_sibiling = right_sibiling->next_ptr[0];
-        for (int i = 0; i <= right_sibiling->no_of_key; i++)
+        for (int i = 1; i < right_sibiling->no_of_key; i++)
         {
-            right_sibiling->key[i] = right_sibiling->key[i + 1];
-            right_sibiling->next_ptr[i] = right_sibiling->next_ptr[i + 1];
+            right_sibiling->key[i - 1] = right_sibiling->key[i];
+            right_sibiling->next_ptr[i - 1] = right_sibiling->next_ptr[i];
         }
+        right_sibiling->next_ptr[right_sibiling->no_of_key - 1] = right_sibiling->next_ptr[right_sibiling->no_of_key];
         right_sibiling->next_ptr[right_sibiling->no_of_key] = nullptr;
-        right_sibiling->no_of_key--;
-
+        right_sibiling->key[--right_sibiling->no_of_key] = 0;
         decend_to_child->key[decend_to_child->no_of_key] = nav->key[next_ptr_index];
         decend_to_child->no_of_key++;
         decend_to_child->next_ptr[decend_to_child->no_of_key] = child_from_sibiling;
@@ -257,19 +258,42 @@ BTree::Node *BTree ::decend(Node *nav, int next_ptr_index)
     }
     else
     {
+        Node *mearge_head = nullptr;
+        Node *mearge_tail = nullptr;
+        int key_to_decend_index = 0;
         if (left_sibiling_index >= 0)
         {
+            mearge_tail = decend_to_child;
+            mearge_head = nav->next_ptr[left_sibiling_index];
+            key_to_decend_index = left_sibiling_index;
         }
         else
         {
+            mearge_head = decend_to_child;
+            mearge_tail = nav->next_ptr[right_sibiling_index];
+            key_to_decend_index = right_sibiling_index - 1;
         }
-        nav->next_ptr[nav->no_of_key] = nullptr;
-        nav->no_of_key--;
+        int &cnt = mearge_head->no_of_key;
+        mearge_head->key[cnt++] = nav->key[key_to_decend_index];
+        for (int i = 0; i < mearge_tail->no_of_key; i++, cnt++)
+        {
+            mearge_head->key[cnt] = mearge_tail->key[i];
+            mearge_head->next_ptr[cnt] = mearge_tail->next_ptr[i];
+        }
+        mearge_head->next_ptr[cnt] = mearge_tail->next_ptr[mearge_tail->no_of_key];
+        for (int i = key_to_decend_index; i <= nav->no_of_key; i++)
+        {
+            nav->key[i] = nav->key[i + 1];
+            nav->next_ptr[i + 1] = nav->next_ptr[i + 2];
+        }
+        nav->next_ptr[nav->no_of_key--] = nullptr;
         if (nav == root && nav->no_of_key == 0)
         {
-            root = left;
+            root = mearge_head;
             delete_node(nav);
         }
+        delete_node(mearge_tail);
+        return mearge_head;
     }
 }
 
@@ -277,9 +301,9 @@ void BTree::delete_key(Node *nav, int index)
 {
     for (int i = index; i < nav->no_of_key; i++)
     {
-        nav->key[i] = i + 1;
+        nav->key[i] = nav->key[i + 1];
     }
-    nav->no_of_key--;
+    nav->key[--nav->no_of_key] = 0;
 }
 
 void BTree::delete_node(Node *nav)
@@ -296,7 +320,7 @@ int *BTree::check_key(Node *nav, int value)
     int start = 0;
     int end = nav->no_of_key - 1;
     int next_ptr_index;
-    int *key = nav->key;
+    vector<int> key = nav->key;
     int *result = new int[2]{0};
     while (start <= end)
     {
@@ -340,6 +364,7 @@ int *BTree::check_key(Node *nav, int value)
 
 void BTree::print()
 {
+    cout << "Size:" << size << endl;
     cout << "In-order traversal:";
     print_inorder(root);
     cout << endl;
@@ -390,7 +415,10 @@ bool BTree::test_properties(Node *nav, int height, RedBlack &height_track, Stack
     if (nav == nullptr)
     {
         if (height_track.get_size() == 0)
+        {
             height_track.insert_node(height);
+            cout << "Height:" << height << endl;
+        }
         else if (height_track.search(height) == nullptr)
             return false;
         return true;
@@ -398,23 +426,23 @@ bool BTree::test_properties(Node *nav, int height, RedBlack &height_track, Stack
     int i = 0;
     if (nav != root && nav->no_of_key < min_key_requirement)
     {
-        cout << "Min key requirement is violated at node that has starting key " << nav->key[0] << endl;
+        cout << "ERROR: Min key requirement is violated at node that has starting key " << nav->key[0] << endl;
     }
     if (nav->no_of_key > max_key_size)
     {
-        cout << "Max key requirement is violated at node that has starting key " << nav->key[0] << endl;
+        cout << "ERROR: Max key requirement is violated at node that has starting key " << nav->key[0] << endl;
     }
     for (; i < nav->no_of_key; i++)
     {
         bool height_property = test_properties(nav->next_ptr[i], height + 1, height_track, inorder_value);
         if (!height_property)
         {
-            cout << "Height property is violated for the branch that has the leaf node with starting key " << nav->key[0] << endl;
+            cout << "ERROR: Height property is violated for the branch that has the leaf node with starting key " << nav->key[0] << endl;
         }
         const int *value = inorder_value.peak();
         if (value != nullptr && *value > nav->key[i])
         {
-            cout << "Key order property is violated at node that has starting key " << nav->key[0] << endl;
+            cout << "ERROR: Key order property is violated at node that has starting key " << nav->key[0] << endl;
         }
         inorder_value.push(nav->key[i]);
     }

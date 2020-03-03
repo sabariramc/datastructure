@@ -1,6 +1,9 @@
 #include "stack.h"
 #include "redblack.h"
 
+#include <vector>
+using namespace std;
+
 #ifndef BTREE_H
 #define BTREE_H
 
@@ -14,26 +17,26 @@ private:
     {
         bool is_leaf;
         int no_of_key;
-        int *key;
-        Node **next_ptr;
+        vector<int> key;
+        vector<Node *> next_ptr;
         Node(int key_size)
         {
             is_leaf = true;
             no_of_key = 0;
-            key = new int[key_size]{0};
-            next_ptr = new Node *[key_size + 1] { nullptr };
+            vector<int> temp_key(key_size, 0);
+            vector<Node *> temp_node(key_size + 1, nullptr);
+            key = temp_key;
+            next_ptr = temp_node;
         }
         ~Node()
         {
-            delete[] key;
             for (int i = 0; i <= no_of_key; i++)
             {
                 delete next_ptr[i];
                 next_ptr[i] = nullptr;
             }
-            delete[] next_ptr;
-            key = nullptr;
-            next_ptr = nullptr;
+            key.clear();
+            next_ptr.clear();
         }
     };
     int size;

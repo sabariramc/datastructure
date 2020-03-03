@@ -4,13 +4,13 @@ import random
 def test_v1():
     x = {0}
     with open("input.txt", "w") as fp:
-        for i in range(1, 1000, 10):
+        for i in range(1, 10000, 10):
             for j in range(i, i+10):
                 option = random.choice([1, 3])
-                number = random.randrange(1, 1000, 2)
+                number = random.randrange(1, 10000, 2)
                 if option == 1:
                     while number in x:
-                        number = random.randrange(1, 1000, 2)
+                        number = random.randrange(1, 10000, 2)
                     x.add(number)
                 else:
                     if number in x:
@@ -33,4 +33,4 @@ def test_v2():
         fp.write("5")
 
 
-test_v2()
+test_v1()
