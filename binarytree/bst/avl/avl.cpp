@@ -4,7 +4,6 @@ using namespace std;
 
 bool AVL::insert_node(int value)
 {
-    cout << "Insert: " << value << endl;
     AVLNode **nav = (AVLNode **)&root;
     if (insert_node(nav, value) != -1)
         size++;
@@ -43,18 +42,15 @@ int AVL::insert_node(AVLNode **nav, int value)
 
 bool AVL::delete_node(int value)
 {
-    cout << "Delete: " << value << " : ";
     AVLNode **nav = (AVLNode **)&root;
     int result = delete_node(nav, value);
     if (result > -1)
     {
         size--;
-        cout << "Value deleted from tree\n";
         return true;
     }
     else
     {
-        cout << "Value not found in the tree\n";
         return false;
     }
 }

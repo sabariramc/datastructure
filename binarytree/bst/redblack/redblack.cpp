@@ -4,7 +4,6 @@ using namespace std;
 
 bool RedBlack::insert_node(int value)
 {
-    cout << "Insert: " << value << endl;
     RBNode **nav = (RBNode **)&root;
     if (insert_node(nav, nullptr, value))
         size++;
@@ -13,18 +12,15 @@ bool RedBlack::insert_node(int value)
 
 bool RedBlack::delete_node(int value)
 {
-    cout << "Delete: " << value << " : ";
     RBNode **nav = (RBNode **)&root;
     int result = delete_node(nav, value);
     if (result > -1)
     {
         size--;
-        cout << "Value deleted from tree\n";
         return true;
     }
     else
     {
-        cout << "Value not found in the tree\n";
         return false;
     }
 }

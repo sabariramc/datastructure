@@ -10,6 +10,7 @@ BTree::BTree(int minimum_degree) : minimum_degree(minimum_degree), max_key_size(
     }
     root = new Node(max_key_size);
     size = 0;
+    height = 0;
 }
 
 BTree::~BTree()
@@ -44,6 +45,7 @@ bool BTree::add(int value)
         temp->next_ptr[0] = root;
         split_node(temp, 0);
         root = temp;
+        height++;
     }
     bool flag = add_in_non_full_node(root, value);
     if (flag)
@@ -123,6 +125,7 @@ bool BTree::remove(int value)
                     {
                         root = left;
                         delete_node(nav);
+                        height--;
                     }
                     delete_node(right);
                     nav = left;
@@ -148,7 +151,7 @@ void BTree::split_node(Node *nav, int child_index)
     Node *node_to_split = nav->next_ptr[child_index];
     new_node->is_leaf = node_to_split->is_leaf;
 
-    for (int i = 0; i < (minimum_degree - 1); i++)
+    for (int i = 0; i < (min_key_requirement); i++)
     {
         new_node->key[i] = node_to_split->key[minimum_degree + i];
     }
@@ -159,14 +162,14 @@ void BTree::split_node(Node *nav, int child_index)
             new_node->next_ptr[i] = node_to_split->next_ptr[minimum_degree + i];
         }
     }
-    node_to_split->no_of_key = new_node->no_of_key = minimum_degree - 1;
+    node_to_split->no_of_key = new_node->no_of_key = min_key_requirement;
     for (int i = nav->no_of_key; i > child_index; i--)
     {
         nav->next_ptr[i + 1] = nav->next_ptr[i];
         nav->key[i] = nav->key[i - 1];
     }
     nav->next_ptr[child_index + 1] = new_node;
-    nav->key[child_index] = node_to_split->key[minimum_degree - 1];
+    nav->key[child_index] = node_to_split->key[min_key_requirement];
     for (int i = node_to_split->no_of_key; i < max_key_size; i++)
     {
         node_to_split->key[i] = 0;
@@ -291,6 +294,7 @@ BTree::Node *BTree ::decend(Node *nav, int next_ptr_index)
         {
             root = mearge_head;
             delete_node(nav);
+            height--;
         }
         delete_node(mearge_tail);
         return mearge_head;
@@ -440,7 +444,7 @@ bool BTree::test_properties(Node *nav, int height, RedBlack &height_track, Stack
             cout << "ERROR: Height property is violated for the branch that has the leaf node with starting key " << nav->key[0] << endl;
         }
         const int *value = inorder_value.peak();
-        if (value != nullptr && *value > nav->key[i])
+        if (value != nullptr && *value >= nav->key[i])
         {
             cout << "ERROR: Key order property is violated at node that has starting key " << nav->key[0] << endl;
         }

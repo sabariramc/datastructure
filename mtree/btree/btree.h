@@ -40,6 +40,7 @@ private:
         }
     };
     int size;
+    int height;
     Node *root;
     void split_node(Node *nav, int child_index);
     bool add_in_non_full_node(Node *nav, int value);
@@ -62,6 +63,10 @@ public:
     int get_size()
     {
         return size;
+    }
+    int get_height()
+    {
+        return height;
     }
 };
 

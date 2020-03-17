@@ -8,8 +8,8 @@ using namespace std;
 int main(int argc, const char **argv)
 {
     freopen("output/output.txt", "w", stdout);
-    freopen("testcases/input_9.txt", "r", stdin);
-    test_btree(2);
+    freopen("testcases/input_8.txt", "r", stdin);
+    test_bplustree(2);
     // freopen("error.txt", "w", stderr);
     // for (int i = 1; i < argc; i++)
     // {
