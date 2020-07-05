@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cmake link and debug",
+            "name": "Run",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/debug/${workspaceFolderBasename}",
+            "program": "${workspaceFolder}/debug/datastructures",
             "args": [
                 // "${workspaceFolder}/testcases/input_1.txt",
                 // "${workspaceFolder}/testcases/input_2.txt",
@@ -27,7 +27,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "cmake debug link",
+            "preLaunchTask": "cmake build",
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]

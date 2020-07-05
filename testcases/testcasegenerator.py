@@ -1,7 +1,7 @@
 import random
 
 
-def test_v1():
+def test_tree():
     x = {0}
     with open("input.txt", "w") as fp:
         for i in range(1, 10000, 10):
@@ -20,7 +20,7 @@ def test_v1():
         fp.write("5")
 
 
-def test_v2():
+def test_tree_old():
     x = {0}
     with open("input.txt", "w") as fp:
         for i in range(1, 50):
@@ -33,4 +33,16 @@ def test_v2():
         fp.write("5")
 
 
-test_v1()
+def test_heap():
+    with open("input.txt", "w") as fp:
+        for _ in range(0, 100):
+            option = random.choice([1, 2])
+            number = random.randrange(1, 100, 2)
+            if option == 1:
+                fp.write(f"{option} {number}\n")
+            else:
+                fp.write(f"{option}\n")
+        fp.write("5")
+
+
+test_heap()

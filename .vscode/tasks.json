@@ -2,10 +2,10 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "cmake run build",
+            "label": "cmake configure build",
             "command": "/usr/bin/cmake",
             "args": [
-                "../.."
+                ".."
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -18,11 +18,11 @@
         },
         {
             "type": "shell",
-            "label": "cmake debug build",
+            "label": "cmake configure debug",
             "command": "/usr/bin/cmake",
             "args": [
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "../.."
+                ".."
             ],
             "options": {
                 "cwd": "${workspaceFolder}/debug"
@@ -35,7 +35,7 @@
         },
         {
             "type": "shell",
-            "label": "cmake debug link",
+            "label": "cmake build",
             "command": "/usr/bin/cmake",
             "args": [
                 "--build",
