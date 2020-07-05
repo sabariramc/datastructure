@@ -8,7 +8,7 @@
                 "../.."
             ],
             "options": {
-                "cwd": "${workspaceFolder}/bin/build"
+                "cwd": "${workspaceFolder}/build"
             },
             "runOptions": {},
             "group": {
@@ -25,7 +25,7 @@
                 "../.."
             ],
             "options": {
-                "cwd": "${workspaceFolder}/bin/debug"
+                "cwd": "${workspaceFolder}/debug"
             },
             "runOptions": {},
             "group": {
@@ -42,7 +42,7 @@
                 "."
             ],
             "options": {
-                "cwd": "${workspaceFolder}/bin/debug"
+                "cwd": "${workspaceFolder}/debug"
             },
             "runOptions": {},
             "group": {

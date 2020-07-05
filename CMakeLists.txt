@@ -4,23 +4,8 @@ project(datastructures VERSION 1.0)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(linkedlist)
-list(APPEND EXTRA_LIBS linkedlist)
-
-add_subdirectory(stack)
-list(APPEND EXTRA_LIBS stack)
-
-add_subdirectory(queue)
-list(APPEND EXTRA_LIBS queue)
-
-add_subdirectory(binarytree)
-list(APPEND EXTRA_LIBS binarytree)
-list(APPEND EXTRA_LIBS bst)
-list(APPEND EXTRA_LIBS avl)
-list(APPEND EXTRA_LIBS redblack)
-
-add_subdirectory(mtree)
-list(APPEND EXTRA_LIBS btree)
+add_subdirectory(src)
+list(APPEND EXTRA_LIBS src)
 
 add_subdirectory(test)
 list(APPEND EXTRA_LIBS test)

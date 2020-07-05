@@ -8,7 +8,7 @@
             "name": "cmake link and debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/debug/${workspaceFolderBasename}",
+            "program": "${workspaceFolder}/debug/${workspaceFolderBasename}",
             "args": [
                 // "${workspaceFolder}/testcases/input_1.txt",
                 // "${workspaceFolder}/testcases/input_2.txt",
