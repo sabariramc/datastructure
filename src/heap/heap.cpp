@@ -11,15 +11,11 @@ void Heap::heapify(int index)
         left_child_index = index * 2 + 1;
         right_child_index = index * 2 + 2;
         swap_index = left_child_index;
-        if (left_child_index < length)
-        {
-            if (right_child_index < length)
-                swap_index = arr[left_child_index] > arr[right_child_index] ? right_child_index : left_child_index;
-            if (arr[swap_index] < arr[index])
-                swap(index, swap_index);
-            else
-                break;
-        }
+        if (right_child_index < length && arr[left_child_index] > arr[right_child_index])
+            swap_index = right_child_index;
+        if (left_child_index >= length || arr[swap_index] > arr[index])
+            break;
+        swap(index, swap_index);
         index = swap_index;
     }
 }
@@ -29,19 +25,14 @@ void Heap::add(int value)
     if (length + 1 >= capacity)
         reallocate(capacity == 0 ? 1 : capacity << 1);
     int index = length++;
-    int parent_index;
+    int parent_index = (index - 1) >> 1;
     int temp;
     arr[index] = value;
-    while (index > 0)
+    while (index > 0 && arr[parent_index] > arr[index])
     {
+        swap(index, parent_index);
+        index = parent_index;
         parent_index = (index - 1) >> 1;
-        if (arr[parent_index] < arr[index])
-            index = 0;
-        else
-        {
-            swap(index, parent_index);
-            index = parent_index;
-        }
     }
 }
 
@@ -98,19 +89,20 @@ void Heap::print()
     }
 }
 
-void Heap::test_integrity()
+bool Heap::test_integrity()
 {
     test_integrity(0, arr[0]);
 }
 
-void Heap::test_integrity(int index, int value)
+bool Heap::test_integrity(int index, int value)
 {
     if (length <= index)
-    {
-        return;
-    }
+        return true;
+    bool val = test_integrity(index * 2 + 1, arr[index]) && test_integrity(index * 2 + 2, arr[index]);
     if (value > arr[index])
+    {
         std::cout << "Error: Parent- " << value << " Child- " << arr[index] << std::endl;
-    test_integrity(index * 2 + 1, arr[index]);
-    test_integrity(index * 2 + 2, arr[index]);
+        val = false;
+    }
+    return false;
 }

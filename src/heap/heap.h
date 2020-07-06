@@ -12,7 +12,7 @@ private:
     void heapify(int index);
     void reallocate(int capicity);
     void swap(int idx1, int idx2);
-    void test_integrity(int index, int value);
+    bool test_integrity(int index, int value);
 
 public:
     Heap()
@@ -30,7 +30,7 @@ public:
     int size() { return length; }
     bool is_empty() { return size() == 0; }
     void print();
-    void test_integrity();
+    bool test_integrity();
 };
 
 #endif // !HEAP_H
