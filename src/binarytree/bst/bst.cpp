@@ -2,16 +2,14 @@
 #include <iostream>
 using namespace std;
 
-bool BST::insert_node(int value)
+BinaryTree::Node **BST::search(Node **nav, int value)
 {
-    Node *temp = new Node(value);
-    Node **nav = &root;
     while (*nav != nullptr)
     {
         int node_value = (*nav)->value;
         if (node_value == value)
         {
-            return false;
+            break;
         }
         else if (node_value > value)
         {
@@ -22,8 +20,17 @@ bool BST::insert_node(int value)
             nav = &((*nav)->right);
         }
     }
-    *nav = temp;
-    size++;
+    return nav;
+}
+
+bool BST::insert_node(int value)
+{
+    Node **nav = search(&root, value);
+    if (*nav == nullptr)
+    {
+        *nav = new Node(value);
+        size++;
+    }
     return true;
 }
 
@@ -55,28 +62,15 @@ int BST::test_node_value(Node *nav)
 
 const int *BST::search(int value)
 {
-    Node *nav = root;
-    while (nav != nullptr)
-    {
-        if (nav->value == value)
-        {
-            return &(nav->value);
-        }
-        else if (nav->value < value)
-        {
-            nav = nav->right;
-        }
-        else
-        {
-            nav = nav->left;
-        }
-    }
+    Node **nav = search(&root, value);
+    if (*nav != nullptr && (*nav)->value == value)
+        return &((*nav)->value);
     return nullptr;
 }
 
 bool BST::delete_node(int value)
 {
-    Node **nav = &root;
+    Node **nav = search(&root, value);
     bool found = delete_node(nav, value);
     if (found)
         size--;
@@ -85,50 +79,35 @@ bool BST::delete_node(int value)
 
 bool BST::delete_node(Node **nav, int value)
 {
-    if (*nav == nullptr)
+    if (*nav != nullptr)
     {
-        return false;
-    }
-    while (*nav != nullptr)
-    {
-        if ((*nav)->value == value)
+        Node *temp = *nav;
+        if (temp->left == nullptr)
         {
-            Node *temp = *nav;
-            if (temp->left == nullptr)
-            {
-                *nav = temp->right;
-            }
-            else if (temp->right == nullptr)
-            {
-                *nav = temp->left;
-            }
-            else
-            {
-                Node **temp_left = &(temp->left);
-                while ((*temp_left)->right != nullptr)
-                {
-                    temp_left = &((*temp_left)->right);
-                }
-                Node *sucessor = *temp_left;
-                if (temp->left != *temp_left)
-                {
-                    *temp_left = sucessor->left;
-                    sucessor->left = temp->left;
-                }
-                sucessor->right = temp->right;
-                *nav = sucessor;
-            }
-            delete_node(temp);
-            return true;
+            *nav = temp->right;
         }
-        else if ((*nav)->value > value)
+        else if (temp->right == nullptr)
         {
-            nav = &((*nav)->left);
+            *nav = temp->left;
         }
         else
         {
-            nav = &((*nav)->right);
+            Node **temp_left = &(temp->left);
+            while ((*temp_left)->right != nullptr)
+            {
+                temp_left = &((*temp_left)->right);
+            }
+            Node *sucessor = *temp_left;
+            if (temp->left != *temp_left)
+            {
+                *temp_left = sucessor->left;
+                sucessor->left = temp->left;
+            }
+            sucessor->right = temp->right;
+            *nav = sucessor;
         }
+        delete_node(temp);
+        return true;
     }
     return false;
 }

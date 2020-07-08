@@ -10,6 +10,7 @@ protected:
     using BinaryTree::delete_node;
     virtual bool delete_node(Node **temp, int value);
     virtual int test_node_value(Node *nav);
+    virtual Node **search(Node **nav, int value);
 
 public:
     bool insert_node(int value);
