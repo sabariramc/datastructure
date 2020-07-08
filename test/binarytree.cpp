@@ -1,10 +1,11 @@
-#include "redblack.h"
+// #include "redblack.h"
+#include "bst.h"
 #include <iostream>
 using namespace std;
 
 void test_binarytree()
 {
-    RedBlack *s = new RedBlack();
+    BST *s = new BST();
     int instruction;
     int value;
     while (true)
@@ -14,16 +15,23 @@ void test_binarytree()
         {
         case 1:
             cin >> value;
-            s->insert_node(value);
-            s->print();
+            cout << "Insert:" << value << "\n";
+            if (s->insert_node(value)){
+                s->print();
+            s->test_tree_integraty();}
             break;
         case 2:
             s->print();
             break;
         case 3:
             cin >> value;
+            cout << "Delete:" << value << "\n";
             if (s->delete_node(value))
+            {
+                cout << "Value deleted from the tree\n";
                 s->print();
+                s->test_tree_integraty();
+            }
             break;
         case 4:
             s->test_tree_integraty();

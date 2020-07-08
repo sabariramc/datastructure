@@ -13,6 +13,25 @@ def test_tree():
                         number = random.randrange(1, 10000, 2)
                     x.add(number)
                 else:
+                    if len(x) > 0:
+                        number = x.pop()
+                fp.write(f"{option} {number}\n")
+            # fp.write("4\n")
+        fp.write("5")
+
+
+def test_tree_v2():
+    x = {0}
+    with open("input.txt", "w") as fp:
+        for i in range(1, 10000, 10):
+            for j in range(i, i+10):
+                option = random.choice([1, 3])
+                number = random.randrange(1, 10000, 2)
+                if option == 1:
+                    while number in x:
+                        number = random.randrange(1, 10000, 2)
+                    x.add(number)
+                else:
                     if number in x:
                         x.remove(number)
                 fp.write(f"{option} {number}\n")
@@ -20,7 +39,7 @@ def test_tree():
         fp.write("5")
 
 
-def test_tree_old():
+def test_tree_old_v1():
     x = {0}
     with open("input.txt", "w") as fp:
         for i in range(1, 50):
@@ -45,4 +64,4 @@ def test_heap():
         fp.write("5")
 
 
-test_heap()
+test_tree()

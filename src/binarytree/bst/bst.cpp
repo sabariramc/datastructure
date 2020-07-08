@@ -8,7 +8,12 @@ bool BST::insert_node(int value)
     Node **nav = &root;
     while (*nav != nullptr)
     {
-        if ((*nav)->value > value)
+        int node_value = (*nav)->value;
+        if (node_value == value)
+        {
+            return false;
+        }
+        else if (node_value > value)
         {
             nav = &((*nav)->left);
         }
@@ -67,4 +72,63 @@ const int *BST::search(int value)
         }
     }
     return nullptr;
+}
+
+bool BST::delete_node(int value)
+{
+    Node **nav = &root;
+    bool found = delete_node(nav, value);
+    if (found)
+        size--;
+    return found;
+}
+
+bool BST::delete_node(Node **nav, int value)
+{
+    if (*nav == nullptr)
+    {
+        return false;
+    }
+    while (*nav != nullptr)
+    {
+        if ((*nav)->value == value)
+        {
+            Node *temp = *nav;
+            if (temp->left == nullptr)
+            {
+                *nav = temp->right;
+            }
+            else if (temp->right == nullptr)
+            {
+                *nav = temp->left;
+            }
+            else
+            {
+                Node **temp_left = &(temp->left);
+                while ((*temp_left)->right != nullptr)
+                {
+                    temp_left = &((*temp_left)->right);
+                }
+                Node *sucessor = *temp_left;
+                if (temp->left != *temp_left)
+                {
+                    *temp_left = sucessor->left;
+                    sucessor->left = temp->left;
+                }
+                sucessor->right = temp->right;
+                *nav = sucessor;
+            }
+            delete_node(temp);
+            return true;
+        }
+        else if ((*nav)->value > value)
+        {
+            nav = &((*nav)->left);
+        }
+        else
+        {
+            nav = &((*nav)->right);
+        }
+    }
+    return false;
 }

@@ -48,14 +48,7 @@ bool BinaryTree::delete_node(int value)
     Node **nav = &root;
     bool found = delete_node(nav, value);
     if (found)
-    {
-        cout << "Value deleted from the tree\n";
         size--;
-    }
-    else
-    {
-        cout << "Value not found in the tree\n";
-    }
     return found;
 }
 
