@@ -9,7 +9,7 @@ int main(int argc, const char **argv)
 {
     freopen("output/output.txt", "w", stdout);
     freopen("testcases/input.txt", "r", stdin);
-    test_binarytree();
+    test_binaryindexedtree();
     // freopen("error.txt", "w", stderr);
     // for (int i = 1; i < argc; i++)
     // {

@@ -1,0 +1,2 @@
+add_library(binaryindexedtree binaryindexedtree.cpp)
+target_include_directories(binaryindexedtree INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

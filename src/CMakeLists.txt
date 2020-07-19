@@ -10,3 +10,5 @@ add_subdirectory(mtree)
 
 add_subdirectory(heap)
 add_subdirectory(dynamicarray)
+
+add_subdirectory(binaryindexedtree)
