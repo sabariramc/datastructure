@@ -5,3 +5,4 @@ void test_btree(int minimum_degree);
 void test_bplustree(int minimum_degree);
 void test_heap();
 void test_binaryindexedtree();
+void test_indexedpriorityqueue();

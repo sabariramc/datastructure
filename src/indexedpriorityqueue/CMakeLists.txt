@@ -1,0 +1,3 @@
+add_library(indexedpriorityqueue indexedpriorityqueue.cpp)
+
+target_include_directories(indexedpriorityqueue INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

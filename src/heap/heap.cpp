@@ -91,7 +91,7 @@ void Heap::print()
 
 bool Heap::test_integrity()
 {
-    test_integrity(0, arr[0]);
+    return test_integrity(0, arr[0]);
 }
 
 bool Heap::test_integrity(int index, int value)
@@ -104,5 +104,5 @@ bool Heap::test_integrity(int index, int value)
         std::cout << "Error: Parent- " << value << " Child- " << arr[index] << std::endl;
         val = false;
     }
-    return false;
+    return val;
 }

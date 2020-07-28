@@ -12,3 +12,5 @@ add_subdirectory(heap)
 add_subdirectory(dynamicarray)
 
 add_subdirectory(binaryindexedtree)
+
+add_subdirectory(indexedpriorityqueue)
