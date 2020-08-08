@@ -5,7 +5,7 @@ using namespace std;
 
 void test_indexedpriorityqueue()
 {
-    IndexedPriorityQueue h(100);
+    IndexedPriorityQueue h(200);
     int instruction;
     int value1, value2;
     while (true)

@@ -1,9 +1,9 @@
 #include "indexedpriorityqueue.h"
 
-IndexedPriorityQueue::IndexedPriorityQueue(int capacity)
+IndexedPriorityQueue::IndexedPriorityQueue(int capacity) :priority(capacity, -1), pm(capacity, -1), im(capacity, -1)
 {
     this->capacity = capacity;
-    priority = new int[capacity];
+    /*priority = new int[capacity];
     pm = new int[capacity];
     im = new int[capacity];
     for (int i = 0; i < capacity; i++)
@@ -11,15 +11,14 @@ IndexedPriorityQueue::IndexedPriorityQueue(int capacity)
         priority[i] = -1;
         pm[i] = -1;
         im[i] = -1;
-    }
+    }*/
 }
 
 IndexedPriorityQueue::~IndexedPriorityQueue()
 {
-    delete[] priority;
-    delete[] pm;
-    delete[] im;
-    std::cout << "Destructor\n";
+    // delete[] priority;
+    // delete[] pm;
+    // delete[] im;
 }
 
 void IndexedPriorityQueue::swap(int i, int j)
@@ -63,7 +62,7 @@ void IndexedPriorityQueue::insert(int key, int priority)
 {
     if (size >= capacity || key < 0 || key >= capacity || pm[key] != -1)
         return;
-    this->priority[size] = priority;
+    this->priority[key] = priority;
     pm[key] = size;
     im[size] = key;
     swim(size);
@@ -77,10 +76,10 @@ int IndexedPriorityQueue::poll()
         return -1;
     }
     int key = im[0];
+    swap(0, --size);
+    sink(0);
     pm[key] = -1;
     priority[key] = -1;
-    swap(0, size--);
-    sink(0);
     im[size] = -1;
     return key;
 }
@@ -118,17 +117,18 @@ void IndexedPriorityQueue::decrease(int key, int value)
 
 void IndexedPriorityQueue::remove(int key)
 {
-    if (key >= capacity || key < 0 || this->pm[key] == -1)
-        return;
     int pos = pm[key];
-    priority[key] = -1;
-    pm[key] = -1;
+    if (key >= capacity || key < 0 || pos == -1)
+        return;
     if (pos != size - 1)
     {
-        swap(pos, size--);
+        swap(pos, size-1);
         sink(pos);
         swim(pos);
     }
+    size--;
+    priority[key] = -1;
+    pm[key] = -1;
     im[size] = -1;
 }
 
@@ -149,10 +149,10 @@ void IndexedPriorityQueue::print()
     }
     else
     {
-        std::cout << "[ " << priority[im[0]];
+        std::cout << "[ (" << priority[im[0]]<<","<<im[0]<<")";
         for (int i = 1; i < size; i++)
         {
-            std::cout << ", " << priority[im[i]];
+            std::cout << ", (" << priority[im[i]]<<","<<im[i]<<")";
         }
         std::cout << " ]\n";
     }

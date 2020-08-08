@@ -1,4 +1,4 @@
-add_library(test stack.cpp queue.cpp binarytree.cpp btree.cpp bplustree.cpp heap.cpp binaryindexedtree.cpp indexedpriorityqueue.cpp)
+add_library(test stack.cpp queue.cpp binarytree.cpp btree.cpp bplustree.cpp heap.cpp binaryindexedtree.cpp testindexedpriorityqueue.cpp)
 target_include_directories(
     test
     INTERFACE  ${CMAKE_CURRENT_SOURCE_DIR}

@@ -1,14 +1,19 @@
 #include <iostream>
 
+#include <vector>
+
 #ifndef INDEXED_PRIORITY_QUEUE_H
 #define INDEXED_PRIORITY_QUEUE_H
 
 class IndexedPriorityQueue
 {
 private:
-    int *priority;
-    int *pm;
-    int *im;
+    // int *priority;
+    // int *pm;
+    // int *im;
+    std::vector<int> priority;
+    std::vector<int>pm;
+    std::vector<int>im;
     int size = 0;
     int capacity = 0;
 

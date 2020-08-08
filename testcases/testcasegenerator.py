@@ -66,13 +66,18 @@ def test_heap():
 
 def test_indexed_priority_queue():
     with open("input.txt", "w") as fp:
+        key_set = set()
         for _ in range(1, 20):
             key = random.randrange(1, 200)
             priority = random.randrange(1, 100)
             fp.write(f"1 {key} {priority}\n")
+            key_set.add(key)
         for _ in range(0, 200):
             option = random.choice([1, 2, 4, 5])
-            key = random.randrange(1, 200)
+            if option in {4, 5}:
+                key = random.choice(list(key_set))
+            else:
+                key = random.randrange(1, 200)
             priority = random.randrange(1, 200)
             if option in {1, 4}:
                 fp.write(f"{option} {key} {priority}\n")
